@@ -6,6 +6,14 @@
 
 <div align="left"> <img width="512" src="git-res/preview.png"> </div>
 
+# About Project
+
+| .NET Version |     Target      | Size  |
+| :----------: | :-------------: | :---: |
+|    net9.0    | Windows 32x\64x | 265mb |
+
+
+
 # Preview
 
 The program communicates via a local network between several automated workstations, each of which has special software for reading data from the cockpit controls, as well as software for flight modeling and graphical output of the simulation.
@@ -16,7 +24,7 @@ The instructor controls the student's flight using a specially designed instruct
 
 
 
-# About functionality
+# About Functionality
 
 The software functionality includes:
 
