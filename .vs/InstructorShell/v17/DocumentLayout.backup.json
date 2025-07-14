@@ -1,0 +1,139 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\SexKiller\\Desktop\\aciation-simulator-instructor-shell\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{0740D2F0-9B10-43EB-84AF-7B72176AC066}|InstructorShell\\InstructorShell.csproj|c:\\users\\sexkiller\\desktop\\aciation-simulator-instructor-shell\\instructorshell\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{0740D2F0-9B10-43EB-84AF-7B72176AC066}|InstructorShell\\InstructorShell.csproj|solutionrelative:instructorshell\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0740D2F0-9B10-43EB-84AF-7B72176AC066}|InstructorShell\\InstructorShell.csproj|c:\\users\\sexkiller\\desktop\\aciation-simulator-instructor-shell\\instructorshell\\controllerparameterspage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0740D2F0-9B10-43EB-84AF-7B72176AC066}|InstructorShell\\InstructorShell.csproj|solutionrelative:instructorshell\\controllerparameterspage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0740D2F0-9B10-43EB-84AF-7B72176AC066}|InstructorShell\\InstructorShell.csproj|c:\\users\\sexkiller\\desktop\\aciation-simulator-instructor-shell\\instructorshell\\instuctortestpanel.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0740D2F0-9B10-43EB-84AF-7B72176AC066}|InstructorShell\\InstructorShell.csproj|solutionrelative:instructorshell\\instuctortestpanel.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0740D2F0-9B10-43EB-84AF-7B72176AC066}|InstructorShell\\InstructorShell.csproj|c:\\users\\sexkiller\\desktop\\aciation-simulator-instructor-shell\\instructorshell\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0740D2F0-9B10-43EB-84AF-7B72176AC066}|InstructorShell\\InstructorShell.csproj|solutionrelative:instructorshell\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0740D2F0-9B10-43EB-84AF-7B72176AC066}|InstructorShell\\InstructorShell.csproj|c:\\users\\sexkiller\\desktop\\aciation-simulator-instructor-shell\\instructorshell\\weatherpanel.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0740D2F0-9B10-43EB-84AF-7B72176AC066}|InstructorShell\\InstructorShell.csproj|solutionrelative:instructorshell\\weatherpanel.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0740D2F0-9B10-43EB-84AF-7B72176AC066}|InstructorShell\\InstructorShell.csproj|c:\\users\\sexkiller\\desktop\\aciation-simulator-instructor-shell\\instructorshell\\udpwork\\udpmessaging.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0740D2F0-9B10-43EB-84AF-7B72176AC066}|InstructorShell\\InstructorShell.csproj|solutionrelative:instructorshell\\udpwork\\udpmessaging.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 309,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{e8b06f52-6d01-11d2-aa7d-00c04f990343}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\SexKiller\\Desktop\\aciation-simulator-instructor-shell\\InstructorShell\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "InstructorShell\\MainWindow.xaml",
+              "ToolTip": "C:\\Users\\SexKiller\\Desktop\\aciation-simulator-instructor-shell\\InstructorShell\\MainWindow.xaml",
+              "RelativeToolTip": "InstructorShell\\MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-07-14T22:42:40.431Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ControllerParametersPage.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\SexKiller\\Desktop\\aciation-simulator-instructor-shell\\InstructorShell\\ControllerParametersPage.xaml.cs",
+              "RelativeDocumentMoniker": "InstructorShell\\ControllerParametersPage.xaml.cs",
+              "ToolTip": "C:\\Users\\SexKiller\\Desktop\\aciation-simulator-instructor-shell\\InstructorShell\\ControllerParametersPage.xaml.cs",
+              "RelativeToolTip": "InstructorShell\\ControllerParametersPage.xaml.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-14T22:41:51.265Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "InstuctorTestPanel.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\SexKiller\\Desktop\\aciation-simulator-instructor-shell\\InstructorShell\\InstuctorTestPanel.xaml.cs",
+              "RelativeDocumentMoniker": "InstructorShell\\InstuctorTestPanel.xaml.cs",
+              "ToolTip": "C:\\Users\\SexKiller\\Desktop\\aciation-simulator-instructor-shell\\InstructorShell\\InstuctorTestPanel.xaml.cs",
+              "RelativeToolTip": "InstructorShell\\InstuctorTestPanel.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-14T22:41:46.906Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\SexKiller\\Desktop\\aciation-simulator-instructor-shell\\InstructorShell\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "InstructorShell\\MainWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\SexKiller\\Desktop\\aciation-simulator-instructor-shell\\InstructorShell\\MainWindow.xaml.cs",
+              "RelativeToolTip": "InstructorShell\\MainWindow.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-14T22:41:32.126Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "WeatherPanel.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\SexKiller\\Desktop\\aciation-simulator-instructor-shell\\InstructorShell\\WeatherPanel.xaml.cs",
+              "RelativeDocumentMoniker": "InstructorShell\\WeatherPanel.xaml.cs",
+              "ToolTip": "C:\\Users\\SexKiller\\Desktop\\aciation-simulator-instructor-shell\\InstructorShell\\WeatherPanel.xaml.cs",
+              "RelativeToolTip": "InstructorShell\\WeatherPanel.xaml.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-14T22:41:22.734Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "UDPMessaging.cs",
+              "DocumentMoniker": "C:\\Users\\SexKiller\\Desktop\\aciation-simulator-instructor-shell\\InstructorShell\\UDPWork\\UDPMessaging.cs",
+              "RelativeDocumentMoniker": "InstructorShell\\UDPWork\\UDPMessaging.cs",
+              "ToolTip": "C:\\Users\\SexKiller\\Desktop\\aciation-simulator-instructor-shell\\InstructorShell\\UDPWork\\UDPMessaging.cs",
+              "RelativeToolTip": "InstructorShell\\UDPWork\\UDPMessaging.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-30T21:02:53.033Z"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 309,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
