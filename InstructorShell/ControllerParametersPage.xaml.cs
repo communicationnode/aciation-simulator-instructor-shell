@@ -1,71 +1,383 @@
-﻿using CustomDesktopShell.UDPWork;
-
+﻿using CustomDesktopShell;
+using CustomDesktopShell.UDPWork;
+using InstructorShell.DataClasses;
+using InstructorShell.Processes;
+using Microsoft.VisualBasic;
+using System.Diagnostics;
+using System.IO;
+using System.Net;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-
 namespace InstructorShell {
-    /// <summary>
-    /// Логика взаимодействия для ControllerParametersPage.xaml
-    /// </summary>
+
+    [StructLayout(LayoutKind.Auto)]
+    [SkipLocalsInit]
     public partial class ControllerParametersPage : Page {
+
+        // fields
         double savedStartupVerticalBarHeight;
         double savedStartupCircleBarHeight;
         double savedStartupCircleBarWidth;
-
+        float rusUpDown = 0.001234f;
+        float rusLeftRight = 0.001234f;
+        float rud = 0.001234f;
+        float pedali = 0.001234f;
         byte tormoza = 0;
+
+        string[] processTargets;
+        string restartEngineAddressData;
+        DateTime lastProcessLaunchDateTime = DateTime.Now;
+        DateTime lastRestartEngineDateTime = DateTime.Now;
+
+        ToolTipText temperaturesToolTip = new ToolTipText("GPU: <loading...>\nCPU: <loading...>");
+        ToolTipText rusToolTip = new ToolTipText("Значение руса: ");
+        ToolTipText rudToolTip = new ToolTipText("Значение руда: ");
+        ToolTipText pedaliToolTip = new ToolTipText("Значение педалей: ");
+
+        // constructor
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        [SkipLocalsInit]
         public ControllerParametersPage() {
             InitializeComponent();
 
+            MainWindow.instance.SetTooltip(temperatureIcon, temperaturesToolTip);
+            MainWindow.instance.SetTooltip(turboIcon, new ToolTipText($"Это поле указывает на текущее состояние турбо."));
+            MainWindow.instance.SetTooltip(dvigatelIcon, new ToolTipText("Это поле указывает на текущее состояние двигателя."));
+            MainWindow.instance.SetTooltip(killTargetsImmediatelyButton, new ToolTipText("Если симуляция была выключена, а кнопка все еще активна, нажмите на нее, чтобы полностью прервать все фоновые процессы программного обеспечения симуляции."));
+            MainWindow.instance.SetTooltip(runSimulationButtton, new ToolTipText("Рекомендуемый способ запустить процедуру симуляции"));
+            MainWindow.instance.SetTooltip(circle_bar, rusToolTip);
+            MainWindow.instance.SetTooltip(vertical_bar, rudToolTip);
+            MainWindow.instance.SetTooltip(vertical_bar2, pedaliToolTip);
+            MainWindow.instance.SetTooltip(restartEngineButton, new ToolTipText("Упрощенный перезапуск двигателя. Эта функция является экспериментальной и проходит этап испытаний"));
+
+            TemperaturesMonitoring();
+            RefreshBarsScale();
+            SubscribeToUDPPackets();
+            SubcribeToControls();
+
+            processTargets = File.ReadAllLines(@$"Configs\ProcessNames.ini");
+            restartEngineAddressData = File.ReadAllLines($@"Configs\restartEngineAddress.ini")[0];
+
+            killTargetsImmediatelyButtonViewBox.Visibility = System.Windows.Visibility.Collapsed;
+            //restartEngineButton.Visibility = System.Windows.Visibility.Collapsed;
+            //PointersTest();
+        }
+
+        // methods
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        [SkipLocalsInit]
+        private void SubscribeToUDPPackets() {
+            UDPMessaging.OnMessageGet += (message) => {
+
+                if (message[0] == 202) {
+
+                    Dispatcher.Invoke([MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+                    [SkipLocalsInit] () => {
+
+                        rusUpDown = BitConverter.ToSingle(message, 1);
+                        rusLeftRight = BitConverter.ToSingle(message, 5);
+                        rud = BitConverter.ToSingle(message, 9);
+                        pedali = BitConverter.ToSingle(message, 13);
+
+                        tormoza = message[21];
+
+                        UpdatePointersScale();
+                        UpdatePointersTransform();
+                        UpdateTooltips();
+                    });
+                }
+            };
+
+            UDPMessaging.OnMessageGet += (message) => {
+
+                if (message[0] == 203) {
+
+                    Dispatcher.Invoke(() => {
+
+                        //  TUBRO    => message[4];
+                        //  DVIGATEL => message[5];
+
+                        text_data.Text = $"ТУРБО: {(message[4] == 0 ? "не запущен" : "запущен")}";
+                        text_data2.Text = $"ДВИГАТЕЛЬ: {(message[5] == 0 ? "не запущен" : "запущен")}";
+
+                        if (message[5] == 0) {
+                            restartEngineButton.Visibility = Visibility.Collapsed;
+                        }
+                        else {
+                            restartEngineButton.Visibility = Visibility.Visible;
+                        }
+                    });
+
+                    EncryptedSTData.UpdateDataBySpecificDatagram(message);
+                }
+            };
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        [SkipLocalsInit]
+        private void SubcribeToControls() {
+            // local fieds
+
+            // local action for change button text
+            Action<string> changeTextOnRunButton = (newText) => { (runSimulationButtton.Content as TextBlock).Text = newText; };
+            Action<string> changeTextOnTerminateButton = (newText) => { (killTargetsImmediatelyButton.Content as TextBlock).Text = newText; };
+
+            // all finded process targets
+            List<RunningAppInfo> findedTargets = new List<RunningAppInfo>();
+
+
+            // events
+
+            runSimulationButtton.Click += (_, _) => {
+
+                // base protection for multiply launching
+                if (Math.Abs((DateTime.Now - lastProcessLaunchDateTime).TotalSeconds) < 10) {
+                    changeTextOnRunButton.Invoke($"Попробуйте через: {10 - Math.Abs((lastProcessLaunchDateTime - DateTime.Now).Seconds)} секунд");
+                    return;
+                }
+                lastProcessLaunchDateTime = DateTime.Now;
+
+
+                changeTextOnRunButton.Invoke("Попытка запустить процесс");
+
+                string loadConfigPath = File.ReadAllText(@$"Configs\LoadAppPath.ini");
+
+                if (loadConfigPath.Length < 1) {
+                    changeTextOnRunButton.Invoke("Файл запуска: null");
+                    return;
+                }
+
+                changeTextOnRunButton("Ожидается запуск процесса");
+
+                try {
+                    Process.Start(loadConfigPath);
+                }
+                catch {
+                    changeTextOnRunButton.Invoke("invalid process");
+                    return;
+                }
+
+                changeTextOnRunButton.Invoke("Процесс запущен удачно");
+            };
+
+            killTargetsImmediatelyButton.Click += (_, _) => {
+                foreach (var target in findedTargets) {
+                    try {
+                        changeTextOnTerminateButton.Invoke($"Завершаем: {target.ID}");
+                        target.Process.Kill();
+                    }
+                    catch { }
+                }
+            };
+
+            // try send "228" byte array as command to remote address
+            restartEngineButton.Click += (_, _) => {
+
+                if (Math.Abs((DateTime.Now - lastRestartEngineDateTime).TotalSeconds) < 15) {
+                    return;
+                }
+                lastRestartEngineDateTime = DateTime.Now;
+
+                try {
+                    IPAddress.TryParse(restartEngineAddressData.Split(':')[0], out IPAddress parsedAddress);
+                    int.TryParse(restartEngineAddressData.Split(':')[1], out int parsedPort);
+
+                    UDPMessaging.SendToEndPoint(new byte[1] { 228 }, new IPEndPoint(parsedAddress, parsedPort));
+                }
+                catch { }
+            };
+
+            // if target process launched - hide button
+            ProcessManager.ProcessStarted += (info) => {
+
+                foreach (string targetTitle in processTargets) {
+                    if (info.Title == targetTitle) {
+                        findedTargets.Add(info);
+
+                        AirMapPanel.instance.EnableRecording();
+
+                        MainWindow.instance.ForceMapPage();
+
+                        runSimulationButttonViewBox.Visibility = System.Windows.Visibility.Collapsed;
+                        killTargetsImmediatelyButtonViewBox.Visibility = System.Windows.Visibility.Visible;
+
+                        break;
+                    }
+                }
+            };
+
+            // if target process ended - return button
+            ProcessManager.ProcessEnded += (info) => {
+
+                if (findedTargets.Count == 0) return;
+
+                foreach (RunningAppInfo target in findedTargets) {
+                    if (info.ID == target.ID && info.Title == target.Title) {
+                        findedTargets.Remove(target);
+                        break;
+                    }
+                }
+
+                /*MainWindow.instance.Title = findedTargets.Count.ToString();*/
+
+                if (findedTargets.Count == 0) {
+
+                    runSimulationButttonViewBox.Visibility = System.Windows.Visibility.Visible;
+                    killTargetsImmediatelyButtonViewBox.Visibility = System.Windows.Visibility.Collapsed;
+
+                    changeTextOnTerminateButton.Invoke("Аварийно завершить симуляцию");
+                    changeTextOnRunButton.Invoke("Запустить симуляцию");
+                    if (findedTargets.Count == 0) {
+                        AirMapPanel.instance.DisableRecording();
+                    }
+                }
+            };
+
+
+            MainWindow.PanelWasOpened += delegate {
+                MainWindow.instance.Dispatcher.Invoke(delegate {
+                    AttachProcessButton(controller_process_stackpanel);
+                });
+            };
+
+            MainWindow.PanelWasClosed += delegate {
+                MainWindow.instance.Dispatcher.Invoke(delegate {
+                    DeattachProcessButton(controller_process_stackpanel);
+                });
+            };
+        }
+
+        private void AttachProcessButton(in StackPanel stackPanel) {
+            try {
+                controller_process_buttons_border.Child = null;
+                stackPanel.Margin = new Thickness(2);
+                MainWindow.instance.instuctor_grid_panel.Children.Add(stackPanel);
+                Grid.SetColumn(stackPanel, 1);
+                stackPanel.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+            }
+            catch { }
+        }
+        private void DeattachProcessButton(in StackPanel stackPanel) {
+            try {
+                stackPanel.Margin = new Thickness(8);
+                MainWindow.instance.instuctor_grid_panel.Children.Remove(stackPanel);
+                controller_process_buttons_border.Child = stackPanel;
+            }
+            catch { }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        [SkipLocalsInit]
+        private void RefreshBarsScale() {
             Task.Run(async () => {
                 await Task.Delay(500);
                 savedStartupVerticalBarHeight = vertical_bar.ActualHeight;
                 savedStartupCircleBarHeight = circle_bar.ActualHeight;
                 savedStartupCircleBarWidth = circle_bar.ActualWidth;
             });
+        }
 
-            UDPMessaging.OnMessageGet += (message) => {
-                if (message[0] == 202) {
-                    Dispatcher.Invoke(() => {
-                        float rusUpDown = BitConverter.ToSingle(message, 1);
-                        float rusLeftRight = BitConverter.ToSingle(message, 5);
-                        float rud = BitConverter.ToSingle(message, 9);
-                        float pedali = BitConverter.ToSingle(message, 13);
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        [SkipLocalsInit]
+        private void UpdatePointersScale() {
 
-                        tormoza = message[21];
+            //MainWindow.instance.panel_name.Content = columnCircleBar.Width.Value;
+            pointer_vertical2.Width = vertical_bar2.ActualWidth;
+            pointer_vertical.Width = vertical_bar2.ActualWidth;
+            pointer_circle.Width = vertical_bar2.ActualWidth * (tormoza == 0 ? 1 : 0.1d);
+        }
 
-                        pointer_vertical.Width = vertical_bar.ActualWidth;
-                        pointer_vertical2.Width = pointer_vertical.ActualWidth;
-                        pointer_circle.Width = pointer_vertical.ActualWidth * (tormoza == 0 ? 1 : 0.3d);
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        [SkipLocalsInit]
+        private void UpdatePointersTransform() {
 
+            // change RUD pointer position by RUD value;
+            pointer_vertical.RenderTransform = new TranslateTransform() {
+                Y = ((Math.Clamp(rud, 0, 1) * -116) * (vertical_bar.ActualHeight / savedStartupVerticalBarHeight) + 57 * (vertical_bar.ActualHeight / savedStartupVerticalBarHeight))
+            };
 
-                        pointer_vertical.RenderTransform = new TranslateTransform() {
-                            Y = ((rud * -300) * (vertical_bar.ActualHeight / savedStartupVerticalBarHeight) + 160 * (vertical_bar.ActualHeight / savedStartupVerticalBarHeight))
-                        };
-                        pointer_vertical2.RenderTransform = new TranslateTransform() {
-                            X = ((pedali * -150) * (circle_bar.ActualWidth / savedStartupCircleBarWidth))
-                        };
-                        pointer_circle.RenderTransform = new TranslateTransform() {
-                            Y = (rusUpDown * 100) * (circle_bar.ActualHeight / savedStartupCircleBarHeight),
-                            X = (rusLeftRight * 100) * (circle_bar.ActualWidth / savedStartupCircleBarWidth)
-                        };
+            // change PEDALI pointer position by PEDALI value;
+            pointer_vertical2.RenderTransform = new TranslateTransform() {
+                X = ((Math.Clamp(pedali, -1, 1) * -45) * (circle_bar.ActualWidth / savedStartupCircleBarWidth))
+            };
 
-                        // ПЕРЕХВАЧЕНЫ ПАРАМЕТРЫ УПРАВЛЕНИЯ. ПРИДУМАЙ С ЭТИМ ЧТО-НИБУДЬ
+            // change RUS pointer position by RUS value;
+            pointer_circle.RenderTransform = new TranslateTransform() {
+                Y = (Math.Clamp(rusUpDown, -1, 1) * 60) * (circle_bar.ActualHeight / savedStartupCircleBarHeight),
+                X = (Math.Clamp(rusLeftRight, -1, 1) * 60) * (circle_bar.ActualWidth / savedStartupCircleBarWidth)
+            };
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        [SkipLocalsInit]
+        private void UpdateTooltips() {
+            rusToolTip.text = $"Значение руса:\n" +
+                        $"Вверх / Вниз = {rusUpDown.ToString("0.000")}\n" +
+                        $"Влево / Вправо = {rusLeftRight.ToString("0.000")}";
+            rudToolTip.text = $"Значение руда: {rud.ToString("0.000")}";
+            pedaliToolTip.text = $"Значение педалей: {pedali.ToString("0.000")}";
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        [SkipLocalsInit]
+        private void TemperaturesMonitoring() {
+            TemperatureMonitor temperatureMonitor = new TemperatureMonitor();
+
+            Task.Run(async () => {
+                while (true) {
+                    await Task.Delay(2000);
+
+                    if (!ToolTipPage.visible) { continue; }
+
+                    DateTime gttime = DateTime.Now;
+
+                    (float? cpuTemp, float? gpuTemp) temps = temperatureMonitor.GetTemperatures();
+
+                    await Dispatcher.BeginInvoke(() => {
+                        float? gpu = temps.gpuTemp;
+                        float? cpu = temps.cpuTemp;
+                        temperaturesToolTip.text = $"" +
+                        $"[{gttime.Hour}:{gttime.Minute}:{gttime.Second}]\n" +
+                        $"GPU: {gpu?.ToString("0.00")}\n" +
+                        $"CPU: {cpu?.ToString("0.00")}";
                     });
                 }
-            };
-            UDPMessaging.OnMessageGet += (message) => {
-                if (message[0] == 203) {
-                    Dispatcher.Invoke(() => {
-                        float turbo = message[4];
-                        float dvigatel = message[5];
+            });
+        }
 
-                        text_data.Text = $"ТУРБО: {(turbo == 0 ? "не запущен" : "запущен")}";
-                        text_data2.Text = $"ДВИГАТЕЛЬ: {(dvigatel == 0 ? "не запущен" : "запущен")}";
-                        // ПЕРЕХВАЧЕНЫ ПАРАМЕТРЫ УПРАВЛЕНИЯ. ПРИДУМАЙ С ЭТИМ ЧТО-НИБУДЬ
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        [SkipLocalsInit]
+        private void PointersTest() {
+            float sinV = 0;
+            float cosV = 0;
+            uint scVal = 0;
+
+            Task.Run([MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+            [SkipLocalsInit] async () => {
+                while (true) {
+                    await Task.Delay(5);
+                    await main_grid.Dispatcher.BeginInvoke([MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+                    [SkipLocalsInit] () => {
+                        scVal++;
+                        sinV = (float)Math.Sin(scVal * 0.05f);
+                        cosV = (float)Math.Cos(scVal * 0.05f);
+
+                        rusUpDown = Math.Clamp(sinV, -1, 1);
+                        rusLeftRight = Math.Clamp(cosV, -1, 1);
+
+                        rud = Math.Clamp(sinV, 0, 1);
+                        pedali = Math.Clamp(cosV, -1, 1);
+
+                        UpdatePointersTransform();
+                        UpdateTooltips();
                     });
                 }
-            };
+            });
         }
     }
 }

@@ -6,18 +6,28 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+	  <PublishSingleFile>true</PublishSingleFile>
+	  <SelfContained>true</SelfContained>
+	  <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <ApplicationIcon>Images\ico.ico</ApplicationIcon>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <AssemblyVersion>1.0.0.2</AssemblyVersion>
+    <FileVersion>1.0.0.2</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Configs\LoadAppPath.ini" />
+    <None Remove="Configs\ProcessNames.ini" />
     <None Remove="fonts\GOST.FON" />
     <None Remove="fonts\GOST.TTF" />
     <None Remove="fonts\GOST_0.FON" />
     <None Remove="fonts\GOST_0.TTF" />
     <None Remove="fonts\GOST_AU.TTF" />
     <None Remove="fonts\GOST_BU.TTF" />
+    <None Remove="Images\AI25_TL.jpg" />
     <None Remove="Images\all.png" />
     <None Remove="Images\armrus_wallp.jpg" />
+    <None Remove="Images\armrus_wallp2_32b.png" />
     <None Remove="Images\armrus_wallp_32b.png" />
     <None Remove="Images\background.png" />
     <None Remove="Images\bekarito.png" />
@@ -163,9 +173,12 @@
     <None Remove="Images\data-shield\scrollbar.bmp" />
     <None Remove="Images\data-shield\treeview_a.png" />
     <None Remove="Images\data-shield\treeview_b.png" />
+    <None Remove="Images\dev_arrow.png" />
+    <None Remove="Images\EMBLEM.png" />
     <None Remove="Images\favicon.ico" />
     <None Remove="Images\ico.ico" />
     <None Remove="Images\l39ico.png" />
+    <None Remove="Images\l39ico2.png" />
     <None Remove="Images\meta-icons\1.png" />
     <None Remove="Images\meta-icons\2.png" />
     <None Remove="Images\meta-icons\3.png" />
@@ -329,28 +342,55 @@
     <None Remove="Images\stardock\Taskbar Grid 05.png" />
     <None Remove="Images\stardock\Wood_x1.png" />
     <None Remove="Images\stardock\Wood_x2.png" />
+    <None Remove="Images\star_vector.svg" />
     <None Remove="Images\superMap.png" />
     <None Remove="Images\superMap32.png" />
+    <None Remove="Images\SuperSecret.jpg" />
+    <None Remove="Images\super_map_scale.jpg" />
     <None Remove="Images\weather\cloudy_pic.png" />
     <None Remove="Images\weather\cloudy_sun_pic.png" />
     <None Remove="Images\weather\rainy_pic.png" />
     <None Remove="Images\weather\snowy_pic.png" />
     <None Remove="Images\weather\sun_pic.png" />
     <None Remove="Images\weather\wind_pic.png" />
+    <None Remove="Images\widgets\airplane_icon.svg" />
+    <None Remove="Images\widgets\bar_cicle.svg" />
     <None Remove="Images\widgets\bar_circle.png" />
     <None Remove="Images\widgets\bar_horizontal.png" />
+    <None Remove="Images\widgets\bar_horizontal.svg" />
     <None Remove="Images\widgets\bar_vertical.png" />
+    <None Remove="Images\widgets\bar_vertical.svg" />
     <None Remove="Images\widgets\dvigatel.png" />
+    <None Remove="Images\widgets\dvigatel.svg" />
+    <None Remove="Images\widgets\info_icon.svg" />
+    <None Remove="Images\widgets\point.png" />
     <None Remove="Images\widgets\pointer.png" />
+    <None Remove="Images\widgets\pointer.svg" />
+    <None Remove="Images\widgets\temperatures.svg" />
     <None Remove="Images\widgets\turbo.png" />
+    <None Remove="Images\widgets\turbo.svg" />
+    <None Remove="Images\widgets\zoom_in.svg" />
+    <None Remove="Images\widgets\zoom_out.svg" />
+    <None Remove="Processes\blackList.txt" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Configs\LoadAppPath.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Configs\ProcessNames.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\ico.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Jint" Version="4.2.2" />
+    <PackageReference Include="EPPlus" Version="8.0.8" />
+    <PackageReference Include="EPPlus.System.Drawing" Version="8.0.0" />
+    <PackageReference Include="Jint" Version="4.4.1" />
+    <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.4" />
+    <PackageReference Include="SharpVectors.Wpf" Version="1.8.4.2" />
+    <PackageReference Include="System.Management" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -360,11 +400,12 @@
     <Resource Include="fonts\GOST_0.TTF" />
     <Resource Include="fonts\GOST_AU.TTF" />
     <Resource Include="fonts\GOST_BU.TTF" />
+    <Resource Include="Images\AI25_TL.jpg" />
     <Resource Include="Images\all.png" />
     <Resource Include="Images\armrus_wallp.jpg" />
+    <Resource Include="Images\armrus_wallp2_32b.png" />
     <Resource Include="Images\armrus_wallp_32b.png" />
     <Resource Include="Images\background.png" />
-    <Resource Include="Images\bekarito.png" />
     <Resource Include="Images\big_map_scale.png" />
     <Resource Include="Images\data-shield\01.png" />
     <Resource Include="Images\data-shield\1.png" />
@@ -507,9 +548,11 @@
     <Resource Include="Images\data-shield\scrollbar.bmp" />
     <Resource Include="Images\data-shield\treeview_a.png" />
     <Resource Include="Images\data-shield\treeview_b.png" />
+    <Resource Include="Images\dev_arrow.png" />
     <Resource Include="Images\favicon.ico" />
     <Resource Include="Images\ico.ico" />
     <Resource Include="Images\l39ico.png" />
+    <Resource Include="Images\l39ico2.png" />
     <Resource Include="Images\meta-icons\1.png" />
     <Resource Include="Images\meta-icons\2.png" />
     <Resource Include="Images\meta-icons\3.png" />
@@ -673,20 +716,40 @@
     <Resource Include="Images\stardock\Taskbar Grid 05.png" />
     <Resource Include="Images\stardock\Wood_x1.png" />
     <Resource Include="Images\stardock\Wood_x2.png" />
-    <Resource Include="Images\superMap.png" />
-    <Resource Include="Images\superMap32.png" />
+    <Resource Include="Images\star_vector.svg" />
+    <Resource Include="Images\SuperSecret.jpg" />
+    <Resource Include="Images\super_map_scale.jpg" />
     <Resource Include="Images\weather\cloudy_pic.png" />
     <Resource Include="Images\weather\cloudy_sun_pic.png" />
     <Resource Include="Images\weather\rainy_pic.png" />
     <Resource Include="Images\weather\snowy_pic.png" />
     <Resource Include="Images\weather\sun_pic.png" />
     <Resource Include="Images\weather\wind_pic.png" />
+    <Resource Include="Images\widgets\airplane_icon.svg" />
+    <Resource Include="Images\widgets\bar_cicle.svg" />
     <Resource Include="Images\widgets\bar_circle.png" />
     <Resource Include="Images\widgets\bar_horizontal.png" />
+    <Resource Include="Images\widgets\bar_horizontal.svg" />
     <Resource Include="Images\widgets\bar_vertical.png" />
+    <Resource Include="Images\widgets\bar_vertical.svg" />
     <Resource Include="Images\widgets\dvigatel.png" />
+    <Resource Include="Images\widgets\dvigatel.svg" />
+    <Resource Include="Images\widgets\info_icon.svg" />
+    <Resource Include="Images\widgets\point.png" />
     <Resource Include="Images\widgets\pointer.png" />
+    <Resource Include="Images\widgets\pointer.svg" />
+    <Resource Include="Images\widgets\temperatures.svg" />
     <Resource Include="Images\widgets\turbo.png" />
+    <Resource Include="Images\widgets\turbo.svg" />
+    <Resource Include="Images\widgets\zoom_in.svg" />
+    <Resource Include="Images\widgets\zoom_out.svg" />
+    <Resource Include="Processes\blackList.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Configs\restartEngineAddress.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

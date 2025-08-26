@@ -176,22 +176,26 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        
     </Page.Resources>
 
     <Grid x:Name="MainGrid" Background="#C1101010">
         <Grid.RowDefinitions>
             <RowDefinition Height="3*"/>
-            <RowDefinition Height="8*"/>
-            <RowDefinition Height="8*"/>
+            <RowDefinition MaxHeight="188" Height="8*"/>
+            <RowDefinition MaxHeight="168" Height="8*"/>
             <RowDefinition Height="3*"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition MaxWidth="116" Width="1*"/>
             <ColumnDefinition Width="10*"/>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition MaxWidth="116" Width="1*"/>
         </Grid.ColumnDefinitions>
 
+        <Border Grid.Row="1" Grid.Column="1" CornerRadius="8" Margin="2" Background="#FF212121"></Border>
+        <Border Grid.Row="2" Grid.Column="1" CornerRadius="8" Margin="2" Background="#FF212121"></Border>
+        
         <Grid x:Name="SlidersGrid" Grid.Row="2" Grid.Column="1">
             <Grid.Resources>
                 <Style TargetType="{x:Type Label}">
@@ -212,7 +216,7 @@
             <Label x:Name="WindLabel" Content="Ветер" Grid.Row="0" HorizontalAlignment="Center" Foreground="White" VerticalAlignment="Center"/>
             <Label x:Name="TimeOfDayLabel" Content="Время суток" Grid.Row="1" HorizontalAlignment="Center" Foreground="White" VerticalAlignment="Center"/>
             <Slider x:Name="WindSlider" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Maximum="200"/>
-            <Slider x:Name="TimeOfDaySlider" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center"></Slider>
+            <Slider x:Name="TimeOfDaySlider" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Maximum="255"></Slider>
             <Image x:Name="WindImage" Source="/Images/weather/wind_pic.png" Grid.Row="0" Grid.Column="2" MaxHeight="32"/>
             <Image x:Name="TimeOfDayImage" Source="/Images/weather/sun_pic.png" Grid.Row="1" Grid.Column="2" MaxHeight="32"/>
 
@@ -232,62 +236,77 @@
 
             <Button x:Name="SunButton" Grid.Column="0">
                 <Button.Content>
-                    <StackPanel>
-                        <Image Source="/Images/weather/sun_pic.png" Margin="12,12,12,12" MaxHeight="64"/>
-                        <Label Content="Ясно" FontSize="12" Foreground="#FFEFEFEF" HorizontalAlignment="Center"></Label>
-                    </StackPanel>
+                    <Viewbox MaxHeight="128">
+                        <StackPanel>
+                            <Image Source="/Images/weather/sun_pic.png" Margin="12,12,12,12" MaxHeight="64" MaxWidth="64"/>
+                            <Label Content="Ясно" FontSize="12" Foreground="#FFEFEFEF" HorizontalAlignment="Center"></Label>
+                        </StackPanel>
+                    </Viewbox>
                 </Button.Content>
             </Button>
             <Button x:Name="CloudButton" Grid.Column="1">
                 <Button.Content>
-                    <StackPanel>
-                        <Image Source="/Images/weather/cloudy_pic.png" Margin="12,12,12,12" MaxHeight="64"/>
-                        <Label Content="Облачно" FontSize="12" Foreground="#FFEFEFEF" HorizontalAlignment="Center"></Label>
-                    </StackPanel>
+                    <Viewbox MaxHeight="128">
+                        <StackPanel>
+                            <Image Source="/Images/weather/cloudy_pic.png" Margin="12,12,12,12" MaxHeight="64" MaxWidth="64"/>
+                            <Label Content="Облачно" FontSize="12" Foreground="#FFEFEFEF" HorizontalAlignment="Center"></Label>
+                        </StackPanel>
+                    </Viewbox>
                 </Button.Content>
             </Button>
             <Button x:Name="RainButton" Grid.Column="2">
                 <Button.Content>
-                    <StackPanel>
-                        <Image Source="/Images/weather/rainy_pic.png" Margin="12,12,12,12" MaxHeight="64"/>
-                        <Label Content="Дождь" FontSize="12" Foreground="#FFEFEFEF" HorizontalAlignment="Center"></Label>
-                    </StackPanel>
+                    <Viewbox MaxHeight="128">
+                        <StackPanel>
+                            <Image Source="/Images/weather/rainy_pic.png" Margin="12,12,12,12" MaxHeight="64" MaxWidth="64"/>
+                            <Label Content="Дождь" FontSize="12" Foreground="#FFEFEFEF" HorizontalAlignment="Center"></Label>
+                        </StackPanel>
+                    </Viewbox>
                 </Button.Content>
             </Button>
             <Button x:Name="SnowButton" Grid.Column="3">
                 <Button.Content>
-                    <StackPanel>
-                        <Image Source="/Images/weather/snowy_pic.png" Margin="12,12,12,12" MaxHeight="64"/>
-                        <Label Content="Снег" FontSize="12" Foreground="#FFEFEFEF" HorizontalAlignment="Center"></Label>
-                    </StackPanel>
+                    <Viewbox MaxHeight="128">
+                        <StackPanel>
+                            <Image Source="/Images/weather/snowy_pic.png" Margin="12,12,12,12" MaxHeight="64" MaxWidth="64"/>
+                            <Label Content="Снег" FontSize="12" Foreground="#FFEFEFEF" HorizontalAlignment="Center"></Label>
+                        </StackPanel>
+                    </Viewbox>
                 </Button.Content>
             </Button>
             <Button x:Name="DustButton" Grid.Column="4" Margin="12,12,12,12">
-                <StackPanel>
-                    <Image Source="/Images/weather/wind_pic.png" Margin="12,12,12,12" MaxHeight="44"/>
-                    <Label Content="Пустыня
-" FontSize="12" Foreground="#FFEFEFEF" HorizontalAlignment="Center"/>
-                </StackPanel>
+                <Viewbox MaxHeight="128">
+                    <StackPanel>
+                        <Image Source="/Images/weather/wind_pic.png" Margin="12,12,12,12" MaxHeight="64" MaxWidth="64"/>
+                        <Label Content="Пустыня" FontSize="12" Foreground="#FFEFEFEF" HorizontalAlignment="Center"></Label>
+                    </StackPanel>
+                </Viewbox>
             </Button>
             <Button x:Name="MegaRainButton" Grid.Column="5" Margin="12,12,12,12">
-                <StackPanel>
-                    <Image Source="/Images/weather/rainy_pic.png" Margin="12,12,12,12" MaxHeight="74"/>
-                    <Label Content="Cильный дождь" FontSize="12" Foreground="#FFEFEFEF" HorizontalAlignment="Center"/>
-                </StackPanel>
+                <Viewbox MaxHeight="128">
+                    <StackPanel>
+                        <Image Source="/Images/weather/rainy_pic.png" Margin="12,12,12,12" MaxHeight="64" MaxWidth="64"/>
+                        <Label Content="Сильный дождь" FontSize="12" Foreground="#FFEFEFEF" HorizontalAlignment="Center"></Label>
+                    </StackPanel>
+                </Viewbox>
             </Button>
             <Button x:Name="MegaSnowButton" Grid.Column="6" Margin="12,12,12,12">
-                <StackPanel>
-                    <Image Source="/Images/weather/snowy_pic.png" Margin="12,12,12,12" MaxHeight="74"/>
-                    <Label Content="Сильный снег" FontSize="12" Foreground="#FFEFEFEF" HorizontalAlignment="Center"/>
-                </StackPanel>
+                <Viewbox MaxHeight="128">
+                    <StackPanel>
+                        <Image Source="/Images/weather/snowy_pic.png" Margin="12,12,12,12" MaxHeight="64" MaxWidth="64"/>
+                        <Label Content="Сильный снег" FontSize="12" Foreground="#FFEFEFEF" HorizontalAlignment="Center"></Label>
+                    </StackPanel>
+                </Viewbox>
             </Button>
             <Button x:Name="MegaDustButton" Grid.Column="7" Margin="12,12,12,12">
-                <StackPanel>
-                    <Image Source="/Images/weather/wind_pic.png" Margin="12,12,12,12" MaxHeight="64"/>
-                    <Label Content="Сильная пустыня " FontSize="12" Foreground="#FFEFEFEF" HorizontalAlignment="Center"/>
-                </StackPanel>
+                <Viewbox MaxHeight="128">
+                    <StackPanel>
+                        <Image Source="/Images/weather/wind_pic.png" Margin="12,12,12,12" MaxHeight="64" MaxWidth="64"/>
+                        <Label Content="Сильная пустыня" FontSize="12" Foreground="#FFEFEFEF" HorizontalAlignment="Center"></Label>
+                    </StackPanel>
+                </Viewbox>
             </Button>
         </Grid>
-        <TextBlock Grid.Column="1" TextAlignment="Center" FontSize="22" TextWrapping="Wrap" Text="Панель управления погодными условиями на карте" Foreground="White"/>
+        <TextBlock Grid.Column="1" VerticalAlignment="Center" TextAlignment="Center" FontSize="22" TextWrapping="Wrap" Text="Панель управления погодными условиями на карте" Foreground="White"/>
     </Grid>
 </Page>

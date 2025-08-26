@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:svg="http://sharpvectors.codeplex.com/svgc/"
       xmlns:local="clr-namespace:CustomDesktopShell"
       mc:Ignorable="d" 
       d:DesignHeight="455" d:DesignWidth="1920"
@@ -180,64 +181,96 @@
 
     <Grid x:Name="MainGrid" Background="#C1101010">
         <Grid.RowDefinitions>
-            <RowDefinition Height="3*"/>
+            <RowDefinition MaxHeight="8px" Height="3*"/>
             <RowDefinition Height="16*"/>
-            <RowDefinition Height="3*"/>
+            <RowDefinition MaxHeight="8px" Height="3*"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition MaxWidth="8px" Width="1*"/>
             <ColumnDefinition Width="10*"/>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition MaxWidth="8px" Width="1*"/>
         </Grid.ColumnDefinitions>
 
         <Grid x:Name="ContentGrid" Grid.Column="1" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Visible">
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="4*"/>
             </Grid.ColumnDefinitions>
-            <Rectangle Grid.Column="1" RadiusX="6" RadiusY="6" Margin="0,0,0,0" StrokeThickness="3">
+
+            <Rectangle Grid.Column="1" RadiusX="6" RadiusY="6" Margin="0,0,0,0" StrokeThickness="3" Stroke="#FFADADAD">
                 <Rectangle.Fill>
-                    <LinearGradientBrush EndPoint="1,1" StartPoint="0,0" ColorInterpolationMode="ScRgbLinearInterpolation" MappingMode="RelativeToBoundingBox" SpreadMethod="Pad">
-                        <GradientStop Color="#1CAFAFAF" Offset="0"/>
-                        <GradientStop Color="#4F323232" Offset="1"/>
-                    </LinearGradientBrush>
+                    <ImageBrush ImageSource="/Images/stardock/Flame Grid 01.png" Stretch="UniformToFill" Opacity="0.75"/>
                 </Rectangle.Fill>
-                <Rectangle.Stroke>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="#FF4E4E4E" Offset="1"/>
-                        <GradientStop Color="#FF5D5D5D" Offset="0"/>
-                    </LinearGradientBrush>
-                </Rectangle.Stroke>
             </Rectangle>
-            <ScrollViewer x:Name="AirMapScrollViewer" Grid.Column="0" Margin="9,9,9,9" HorizontalScrollBarVisibility="Visible">
-                <Canvas x:Name="AirMapContentGrid" Height="1480" Width="1920">
-                    <Image x:Name="AirMapImage" Source="/Images/big_map_scale.png" UseLayoutRounding="False" Cursor="Arrow" Stretch="Fill" Width="2920" Height="1080" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <Image x:Name="AirPlane" Source="/Images/l39ico.png" MaxHeight="64" HorizontalAlignment="Center" VerticalAlignment="Center" Canvas.Left="0" Canvas.Top="0" RenderTransformOrigin="0.5,0.5">
-                        <Image.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform Angle="0"/>
-                                <TranslateTransform X="-32" Y="-32"/>
-                            </TransformGroup>
-                        </Image.RenderTransform>
+
+            <ScrollViewer x:Name="AirMapScrollViewer" Grid.Column="0" Margin="9,9,9,9" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden">
+                <Canvas x:Name="AirMapContentGrid" Height="1480" Width="1920" AllowDrop="True" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                    <Image x:Name="AirMapImage" UseLayoutRounding="False" Cursor="Arrow" Stretch="Fill" Width="2920" Height="1080" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Image.Source>
+                            <BitmapImage UriSource="/Images/super_map_scale.jpg" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.CachingHint="Cache" CacheOption="OnLoad" CreateOptions="PreservePixelFormat"/>
+                        </Image.Source>
                     </Image>
                 </Canvas>
             </ScrollViewer>
-            <Rectangle x:Name="RecUp" Fill="#00000000" VerticalAlignment="Top" Height="64" Margin="0,0,16,0"/>
-            <Rectangle x:Name="RecDown" Fill="#00000000" VerticalAlignment="Bottom" Height="64" Margin="0,0,24,24"/>
-            <Rectangle x:Name="RecLeft" Fill="#00000000" Margin="0,0,0,24" HorizontalAlignment="Left" Width="64"/>
-            <Rectangle x:Name="RecRight" Fill="#00000000" Margin="0,0,24,24" HorizontalAlignment="Right" Width="64"/>
-            <Label x:Name="debugger" HorizontalContentAlignment="Left" Content="NaN" FontSize="16" Margin="9,9,9,9" Foreground="White" IsHitTestVisible="False"/>
+
+            <Grid x:Name="RecordButtonGrid">
+                <Grid.RowDefinitions>
+                    <RowDefinition MaxHeight="128px"/>
+                    <RowDefinition/>
+                    <RowDefinition MaxHeight="64px"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition MaxWidth="128px"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition MaxWidth="128px"/>
+                </Grid.ColumnDefinitions>
+
+
+
+                <Button x:Name="StatisticRecordButton" Grid.Row="2" Background="Black">
+                    <Viewbox>
+                        <Label VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="0" Foreground="White">
+                            <TextBlock x:Name="StatisticRecordButtonTextBox" TextWrapping="Wrap" FontSize="14" TextAlignment="Center" Text="Запись"/>
+                        </Label>
+                    </Viewbox>
+                </Button>
+            </Grid>
+
+            <Viewbox x:Name="ZoomButtonsViewbox" Stretch="Uniform" MaxWidth="200" MaxHeight="120" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10">
+                <Grid MinHeight="339" MinWidth="150">
+
+                    <Button x:Name="ZoomInButton" Height="NaN" Width="NaN" Background="#BF000000" Margin="4,4,4,200">
+                        <svg:SvgViewbox Source="/Images/Widgets/zoom_in.svg" MaxHeight="64"/>
+                    </Button>
+
+                    <Button x:Name="ZoomOutButton" Height="NaN" Width="NaN"  Background="#BF000000" Margin="4,200,4,4">
+                        <svg:SvgViewbox Source="/Images/Widgets/zoom_out.svg" MaxHeight="64"/>
+                    </Button>
+                </Grid>
+            </Viewbox>
+            <Grid x:Name="PanelInformerGrid">
+                <Grid.RowDefinitions>
+                    <RowDefinition MaxHeight="185px"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Viewbox IsHitTestVisible="False" Margin="18" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Grid>
+                        <Border IsHitTestVisible="False" CornerRadius="7" Background="#BF000000"/>
+                        <Label IsHitTestVisible="False" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="0" Foreground="White">
+                            <TextBlock IsHitTestVisible="False" x:Name="PanelInformerLabel" TextWrapping="Wrap" FontSize="14" TextAlignment="Center" Text="_def.Data"/>
+                        </Label>
+                    </Grid>
+                </Viewbox>
+            </Grid>
+
         </Grid>
-        <Button x:Name="ZoomInButton" Grid.Row="3" Grid.Column="1" MinWidth="128" MaxWidth="128" HorizontalAlignment="Center" Margin="12,12,150,12">
-            <Button.Content>
-                <Image Source="/Images/data-shield/59.png" MaxHeight="32"/>
-            </Button.Content>
-        </Button>
-        <Button x:Name="ZoomOutButton" Grid.Row="2" Grid.Column="1" MinWidth="128" MaxWidth="128" HorizontalAlignment="Center" Margin="150,12,12,12">
-            <Image Source="/Images/data-shield/60.png" MaxHeight="32"/>
-        </Button>
-        <TextBlock Grid.Column="1" TextAlignment="Center" FontSize="22" TextWrapping="Wrap" Text="Панель отображения положения самолета L-39 на карте" Foreground="White"/>
     </Grid>
 </Page>

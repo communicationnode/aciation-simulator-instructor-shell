@@ -25,7 +25,7 @@ namespace CustomDesktopShell {
         public void SendTimeOfDay(double value) {
             byte[] packet = new byte[2];
             packet[0] = 1;
-            packet[1] = (byte)(value * 2.2f);
+            packet[1] = (byte)(value);
 
             IPEndPoint receiver = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 5687);
             UDPWork.UDPMessaging.SendToEndPoint(packet, receiver);

@@ -1,9 +1,14 @@
 ﻿using InstructorShell;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 
 namespace CustomDesktopShell.UDPWork {
+
+    [StructLayout(LayoutKind.Auto)]
+    [SkipLocalsInit]
     internal static class UDPMessaging {
         /* values */
         private static bool crashed = false;
@@ -15,6 +20,8 @@ namespace CustomDesktopShell.UDPWork {
 
 
         /* methods */
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        [SkipLocalsInit]
         internal static void Initialize() {
             receiver = new UdpClient(localEndpoint);
 
@@ -30,6 +37,10 @@ namespace CustomDesktopShell.UDPWork {
             };
             StartReceive();
         }
+
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        [SkipLocalsInit]
         internal static void StartReceive() {
             if (crashed) { return; }
 
@@ -49,6 +60,10 @@ namespace CustomDesktopShell.UDPWork {
                 }
             });
         }
+
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        [SkipLocalsInit]
         internal static void SendToEndPoint(byte[] datagram, IPEndPoint endPoint) {
             try {
                 receiver.Send(datagram, endPoint);

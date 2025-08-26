@@ -4,120 +4,148 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:InstructorShell"
+      xmlns:svg="http://sharpvectors.codeplex.com/svgc/"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ControllerParametersPage">
 
-    <Grid>
-        <Border BorderBrush="#FFB5B5B5" BorderThickness="1" CornerRadius="12,12,12,12">
-            <Border.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#8C737373" Offset="1"/>
-                    <GradientStop Color="#83FFFFFF" Offset="0"/>
-                </LinearGradientBrush>
-            </Border.Background>
-            <Grid Name="main_grid">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="8*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="10*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="8*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
+    <Page.Resources>
+        <Style TargetType="{x:Type Button}">
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Style.Resources>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="1,1,1,1" />
+            <Setter Property="Width" Value="30" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="BorderBrush" Value="#3F707070" />
+            <Setter Property="Background" Value="#8A474747" />
+            <Setter Property="Foreground" Value="AliceBlue" />
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontFamily" Value=" GOST Type BU"/>
+        </Style>
+    </Page.Resources>
+    <Grid MaxHeight="480px" MaxWidth="840">
 
-                <TextBlock x:Name="text1" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22" TextWrapping="Wrap" Text="О запуске:" Foreground="White" FontWeight="Bold"/>
-                <TextBlock x:Name="text2" Grid.Column="3" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22" TextWrapping="Wrap" Text="О управлении:" Foreground="White" FontWeight="Bold"/>
+        <Viewbox x:Name="main_grid" Stretch="Uniform">
+            <Grid Height="448" Width="798">
+                <Border BorderThickness="1" CornerRadius="12,12,12,12">
+                    <Border.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#59E0E0E0" Offset="1"/>
+                            <GradientStop Color="#83FFFFFF" Offset="0"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                </Border>
+                <Viewbox x:Name="zapusk_grid" MaxWidth="500px" MaxHeight="328px" Stretch="Uniform" Margin="38,43,380,64">
+                    <Grid Height="341.33333333333331" Width="380">
 
-                <Grid Name="zapusk_grid" Grid.Row="1" Grid.Column="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="3*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                    </Grid.RowDefinitions>
+                        <Border CornerRadius="12,12,12,12" Margin="-10,-10,-10,-10">
+                            <Border.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#8C000000"/>
+                                    <GradientStop Color="#884C4C4C" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
 
-                    <Border Grid.RowSpan="4" CornerRadius="12,12,12,12" Margin="-10,-10,-10,-10" Grid.ColumnSpan="4">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                <GradientStop Color="#8C000000"/>
-                                <GradientStop Color="#884C4C4C" Offset="1"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
 
-                    <Image Source="/Images/widgets/turbo.png" Grid.Row="1" Margin="8,8,8,8"/>
-                    <Image Source="/Images/widgets/dvigatel.png" Grid.Row="2" Margin="8,8,8,8"/>
+                        <Grid Name="zapusk_grid_content">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
 
-                    <TextBlock x:Name="text_data" Grid.Column="1" Grid.Row="1" FontSize="22" HorizontalAlignment="Left" VerticalAlignment="Center" TextWrapping="Wrap" Text="ожидание данных" FontWeight="Bold">
-                        <TextBlock.Foreground>
-                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                <GradientStop Color="Black"/>
-                                <GradientStop Color="White" Offset="0.997"/>
-                                <GradientStop Color="#FFADADAD"/>
-                            </LinearGradientBrush>
-                        </TextBlock.Foreground>
-                    </TextBlock>
-                    <TextBlock x:Name="text_data2" Grid.Column="1" Grid.Row="2" FontSize="22" HorizontalAlignment="Left" VerticalAlignment="Center" TextWrapping="Wrap" Text="ожидание данных" FontWeight="Bold">
-                        <TextBlock.Foreground>
-                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                <GradientStop Color="Black"/>
-                                <GradientStop Color="White" Offset="0.997"/>
-                                <GradientStop Color="#FFADADAD"/>
-                            </LinearGradientBrush>
-                        </TextBlock.Foreground>
-                    </TextBlock>
-                    
-                </Grid>
+                            <TextBlock TextAlignment="Center" Margin="0,15,0,15" Grid.Row="0" x:Name="text1" FontSize="22" TextWrapping="Wrap" Text="Системная информация:" Foreground="White" FontWeight="Bold"/>
 
-                <Grid Name="controllers_grid" Grid.Row="1" Grid.Column="3">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="0.1*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="5*"/>
-                        <RowDefinition Height="1*"/>
-                    </Grid.RowDefinitions>
+                            <Border Grid.Row="1" Margin="3" CornerRadius="16" Background="#FF272727">
+                                <StackPanel Orientation="Horizontal">
+                                    <svg:SvgViewbox x:Name="temperatureIcon" Source="/Images/widgets/temperatures.svg" Margin="8,8,8,8"/>
+                                    <TextBlock x:Name="text_data0" FontSize="22" HorizontalAlignment="Left" VerticalAlignment="Center" TextWrapping="Wrap" Text="температура" FontWeight="Bold" Foreground="White"/>
+                                </StackPanel>
+                            </Border>
 
-                    <Border Grid.RowSpan="3" Grid.ColumnSpan="2" CornerRadius="12,12,12,12" Margin="-10,-10,-10,-10">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                <GradientStop Color="#8C000000"/>
-                                <GradientStop Color="#884C4C4C" Offset="1"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
+                            <Border Grid.Row="2" Margin="3" CornerRadius="16" Background="#FF272727">
+                                <StackPanel Orientation="Horizontal">
+                                    <svg:SvgViewbox x:Name="turboIcon" Source="/Images/widgets/turbo.svg" Margin="8,8,8,8"/>
+                                    <TextBlock x:Name="text_data" FontSize="22" HorizontalAlignment="Left" VerticalAlignment="Center" TextWrapping="Wrap" Text="ожидание турбо" FontWeight="Bold" Foreground="White"/>
+                                </StackPanel>
+                            </Border>
 
-                    <Image x:Name="vertical_bar" Source="/Images/widgets/bar_vertical.png" Grid.Column="0" Grid.Row="1"/>
-                    <Image x:Name="vertical_bar2" Source="/Images/widgets/bar_horizontal.png" Grid.Column="1" Grid.Row="2" RenderTransformOrigin="0.5,0.5">
-                        <Image.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform ScaleX="1" ScaleY="1"/>
-                                <SkewTransform/>
-                                <RotateTransform Angle="0"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </Image.RenderTransform>
-                    </Image>
-                    <Image x:Name="circle_bar" Source="/Images/widgets/bar_circle.png" Grid.Column="1" Grid.Row="1"/>
+                            <Border Grid.Row="3" Margin="3" CornerRadius="16" Background="#FF272727">
+                                <StackPanel Orientation="Horizontal">
+                                    <svg:SvgViewbox x:Name="dvigatelIcon" Source="/Images/widgets/dvigatel.svg" Margin="8,8,8,8"/>
+                                    <TextBlock x:Name="text_data2" FontSize="22" HorizontalAlignment="Left" VerticalAlignment="Center" TextWrapping="Wrap" Text="ожидание двигателя" FontWeight="Bold" Foreground="White"/>
+                                    <Button Name="restartEngineButton" Margin="25,0,0,0" MinHeight="32" MinWidth="32">
+                                        <Image Source="/Images/data-shield/117.png" Margin="5"/>
+                                    </Button>
+                                </StackPanel>
+                            </Border>
 
-                    <Image x:Name="pointer_vertical" Source="/Images/widgets/pointer.png" Grid.Column="0" Grid.Row="1"  RenderTransformOrigin="0,0"/>
-                    <Image x:Name="pointer_circle" Source="/Images/widgets/pointer.png" Grid.Column="1" Grid.Row="1" />
-                    <Image x:Name="pointer_vertical2" Source="/Images/widgets/pointer.png" Grid.Column="1" Grid.Row="2"  RenderTransformOrigin="0,0"/>
-                </Grid>
+                            <Border Name="controller_process_buttons_border" Grid.Row="4" Margin="3" CornerRadius="16" Background="#FF272727">
+                                <StackPanel Name="controller_process_stackpanel" Orientation="Horizontal" Margin="8">
+
+                                    <Viewbox x:Name="runSimulationButttonViewBox" MinWidth="94" Stretch="Uniform">
+
+                                        <Button x:Name="runSimulationButtton" Height="30" Width="94">
+                                            <TextBlock TextWrapping="Wrap" FontStretch="Expanded"><Run Text="Запустить симуляцию"/></TextBlock>
+                                        </Button>
+
+                                    </Viewbox>
+                                    <Viewbox Name="killTargetsImmediatelyButtonViewBox" MinWidth="128" Stretch="Uniform">
+
+                                        <Button x:Name="killTargetsImmediatelyButton" Background="#BF860000" Height="30" Width="128">
+                                            <TextBlock TextWrapping="Wrap" FontStretch="Expanded" Foreground="#FFFFF0F0"><Run Text="Аварийно завершить симуляцию"/></TextBlock>
+                                        </Button>
+
+                                    </Viewbox>
+
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Grid>
+                </Viewbox>
+                <Viewbox x:Name="controllers_grid" MaxWidth="320px" MaxHeight="328px" Stretch="Uniform" Margin="456,43,38,64">
+                    <Grid Height="341.33333333333331" Width="304">
+
+                        <Border CornerRadius="12,12,12,12" Margin="-10,-10,-10,-10">
+                            <Border.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="#8C000000"/>
+                                    <GradientStop Color="#884C4C4C" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+
+                        <Border Margin="3,71,3,3" CornerRadius="16" Background="#FF272727"/>
+
+                        <Grid Margin="20,0,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition MaxHeight="64px"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" TextAlignment="Center" Margin="0,15,0,15" x:Name="text2" FontSize="22" TextWrapping="Wrap" Text="О управлении:" Foreground="White" FontWeight="Bold"/>
+
+                            <svg:SvgViewbox Grid.Row="1" Width="50" MaxWidth="128px" x:Name="vertical_bar" Source="/Images/widgets/bar_vertical.svg" Grid.Column="0" Margin="0,47,230,60"/>
+                            <svg:SvgViewbox Grid.Row="1" MaxHeight="128px" x:Name="vertical_bar2" Source="/Images/widgets/bar_horizontal.svg" RenderTransformOrigin="0.5,0.5" Margin="74,226,7,13"/>
+                            <svg:SvgViewbox Grid.Row="1" x:Name="circle_bar" Source="/Images/widgets/bar_cicle.svg" Margin="74,47,7,60"/>
+
+                            <svg:SvgViewbox Grid.Row="1" MaxHeight="50px" MaxWidth="50px" x:Name="pointer_vertical" Source="/Images/widgets/pointer.svg" Grid.Column="0"  RenderTransformOrigin="0,0" IsHitTestVisible="False" Margin="0,47,230,60"/>
+                            <svg:SvgViewbox Grid.Row="1" MaxHeight="50px" MaxWidth="50px" x:Name="pointer_circle" Source="/Images/widgets/pointer.svg" IsHitTestVisible="False" Margin="74,47,7,60" />
+                            <svg:SvgViewbox Grid.Row="1" MaxHeight="50px" MaxWidth="50px" x:Name="pointer_vertical2" Source="/Images/widgets/pointer.svg"  RenderTransformOrigin="0,0" IsHitTestVisible="False" Margin="74,226,7,13"/>
+                        </Grid>
+
+
+                    </Grid>
+                </Viewbox>
             </Grid>
-        </Border>
+        </Viewbox>
+
     </Grid>
 </Page>

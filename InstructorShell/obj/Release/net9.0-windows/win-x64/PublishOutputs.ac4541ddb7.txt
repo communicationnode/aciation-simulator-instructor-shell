@@ -1,0 +1,12 @@
+C:\Users\SexKiller\Desktop\build_1.0.0.2\InstructorShell.pdb
+C:\Users\SexKiller\Desktop\build_1.0.0.2\Configs\LoadAppPath.ini
+C:\Users\SexKiller\Desktop\build_1.0.0.2\Configs\ProcessNames.ini
+C:\Users\SexKiller\Desktop\build_1.0.0.2\Configs\restartEngineAddress.ini
+C:\Users\SexKiller\Desktop\build_1.0.0.2\D3DCompiler_47_cor3.dll
+C:\Users\SexKiller\Desktop\build_1.0.0.2\PenImc_cor3.dll
+C:\Users\SexKiller\Desktop\build_1.0.0.2\PresentationNative_cor3.dll
+C:\Users\SexKiller\Desktop\build_1.0.0.2\vcruntime140_cor3.dll
+C:\Users\SexKiller\Desktop\build_1.0.0.2\wpfgfx_cor3.dll
+C:\Users\SexKiller\Desktop\build_1.0.0.2\MonoPosixHelper.dll
+C:\Users\SexKiller\Desktop\build_1.0.0.2\libMonoPosixHelper.dll
+C:\Users\SexKiller\Desktop\build_1.0.0.2\InstructorShell.exe
