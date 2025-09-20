@@ -178,7 +178,7 @@
     <Grid Name="base_grid">
         <Image Name="base_background_image" Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Image.Source>
-                <BitmapImage UriSource="/Images/armrus_wallp_32b.png" RenderOptions.BitmapScalingMode="NearestNeighbor" CacheOption="OnLoad" CreateOptions="PreservePixelFormat"/>
+                <BitmapImage UriSource="/Images/background1.png" RenderOptions.BitmapScalingMode="NearestNeighbor" CacheOption="OnLoad" CreateOptions="PreservePixelFormat"/>
             </Image.Source>
         </Image>
 
@@ -210,26 +210,31 @@
                         <ColumnDefinition Width="20*"/>
                         <ColumnDefinition MaxWidth="128" Width="8*"/>
                         <ColumnDefinition MaxWidth="128" Width="8*"/>
+                        <ColumnDefinition MaxWidth="128" Width="8*"/>
                         <ColumnDefinition MinWidth="74" MaxWidth="74" Width="3*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button Grid.Column="3" Margin="4" x:Name="close_panel_btn"  Background="#AFD2D2D2" Width="NaN" Height="NaN" Cursor="Hand" UseLayoutRounding="False">
+                    <Button Grid.Column="4" Margin="4" x:Name="close_panel_btn"  Background="#AFD2D2D2" Width="NaN" Height="NaN" Cursor="Hand" UseLayoutRounding="False">
                         <Image Source="/Images/data-shield/77.png" MaxHeight="12"/>
                     </Button>
 
-                    <Button Grid.Column="1" Margin="4" x:Name="weather_btn" Width="NaN" Height="NaN">
+                    <Button Grid.Column="1" Margin="4" x:Name="stat_panel_btn" Width="NaN" Height="NaN">
+                        <Label VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="0" Foreground="White">
+                            <TextBlock TextWrapping="Wrap" FontSize="14" TextAlignment="Center" Text="Приборы"/>
+                        </Label>
+                    </Button>
+
+                    <Button Grid.Column="2" Margin="4" x:Name="weather_btn" Width="NaN" Height="NaN">
                         <Label VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="0" Foreground="White">
                             <TextBlock TextWrapping="Wrap" FontSize="14" TextAlignment="Center" Text="Погода"/>
                         </Label>
                     </Button>
 
-                    <Button Grid.Column="2" Margin="4" x:Name="map_panel_btn" Width="NaN" Height="NaN">
+                    <Button Grid.Column="3" Margin="4" x:Name="map_panel_btn" Width="NaN" Height="NaN">
                         <Label VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="0" Foreground="White">
                             <TextBlock TextWrapping="Wrap" FontSize="14" TextAlignment="Center" Text="Карта"/>
                         </Label>
                     </Button>
-
-                    <Button Grid.Column="3" Margin="4" x:Name="test_panel_btn" Content="Тест" Width="NaN" Height="NaN" Visibility="Collapsed" Padding="1,12,1,12" HorizontalAlignment="Right"/>
 
                 </Grid>
             </Grid>
@@ -240,9 +245,13 @@
                     <ColumnDefinition MaxWidth="100" MinWidth="90px" Width="1*"/>
                 </Grid.ColumnDefinitions>
                 <Label HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="1" Foreground="White" FontSize="18">
-                    <TextBlock Name="authorRights_label" TextWrapping="Wrap" FontSize="12" TextAlignment="Center" Text="Разработал &quot;-&quot;. Год выпуска - 2025"/>
+                    <TextBlock Name="authorRights_label" TextWrapping="Wrap" FontSize="12" TextAlignment="Center" Text="Разработал &quot;---&quot;. Год выпуска - 2025"/>
                 </Label>
-                <Border BorderBrush="Black" BorderThickness="0" MaxHeight="52"  Grid.Column="2" Margin="7" Background="#FF888888"/>
+                <Border BorderBrush="Black" BorderThickness="0" MaxHeight="52"  Grid.Column="2" Margin="7">
+                    <Border.Background>
+                        <ImageBrush Stretch="Uniform" ImageSource="/Images/EMBLEM.png"/>
+                    </Border.Background>
+                </Border>
             </Grid>
             <Frame Name="controlsFrame" Content="Frame" Margin="15,15,15,15" Grid.Row="2" Source="/ControllerParametersPage.xaml">
 

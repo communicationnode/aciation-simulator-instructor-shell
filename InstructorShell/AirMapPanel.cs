@@ -1,4 +1,5 @@
-﻿using InstructorShell;
+﻿using CustomDesktopShell.UDPWork;
+using InstructorShell;
 using InstructorShell.DataClasses;
 using InstructorShell.DataOutputXML;
 using System.Runtime.CompilerServices;
@@ -19,16 +20,14 @@ namespace CustomDesktopShell {
     public partial class AirMapPanel : Page {
 
         // fields
-
         internal static AirMapPanel instance = null;
         internal static Queue<MapObject> mapObjectsUpdatingQueue { get; private set; } = new Queue<MapObject>();
 
-
         //map scaling parameters
+        public const double TO_RADIANS_MULTIPLIER = Math.PI / 180;
         private protected const double ETALON_NEEDED_WIDTH = 5832;
         private protected const double STANDART_NEEDED_HEIGHT = 2533;
         private protected const double HEIGHT_COEFFICIENT = 5832 / 2533;
-        public const double TO_RADIANS_MULTIPLIER = Math.PI / 180;
 
         //map scaling parameters
         private static protected double currentMapWidth = ETALON_NEEDED_WIDTH;
@@ -44,17 +43,14 @@ namespace CustomDesktopShell {
         private static protected Point cachedMapOffset;
 
         //airplane position
-
         private static protected MapObject? airplane;
 
         // airplane offset parameters
-
         // XY axys world angle
         public static double angle = 101.4d;
         // coordinate offset multiplier
         public static double coordinateWorldScaleDivide = 0.00025d;
 
-        // runtime tooltips
 
         // constuctor
         [SkipLocalsInit]
@@ -78,6 +74,14 @@ namespace CustomDesktopShell {
             StartPointCreate();
             StartRecordTimer();
 
+            /*Task.Run(async () => {
+                while (true) {
+                    await Task.Delay(4000);
+                    // DEBUG FUNCTION
+                    EncryptedSTData.AllRandomize();
+                }
+            });*/
+
             StatisticRecordButtonTextBox.Text = $"{(DataRecorder.enabled is false ? "Запись" : "Остановить")}";
 
 
@@ -88,18 +92,16 @@ namespace CustomDesktopShell {
 
         /* methods */
         //jint invokable by
-        public static void ForceOffset(in double x, in double y) {
-            airplane.offset.X = x * coordinateWorldScaleDivide;
-            airplane.offset.Y = y * coordinateWorldScaleDivide;
-        }
         public static void ForceStartOffset(in double x, in double y) {
             airplane.position.X = x;
             airplane.position.Y = y;
         }
+        public static void ForceOffset(in double x, in double y) {
+            airplane.offset.X = x * coordinateWorldScaleDivide;
+            airplane.offset.Y = y * coordinateWorldScaleDivide;
+        }
 
         //local invokable
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        [SkipLocalsInit]
         private void AllowUDPPackets() {
             UDPWork.UDPMessaging.OnMessageGet += [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
             [SkipLocalsInit] (packet) => {
@@ -107,6 +109,16 @@ namespace CustomDesktopShell {
                 // validate packet type
                 byte packetType = packet[0];
                 if (packetType != 101) return;
+
+                // repeat to remote
+                if (MainWindow.repeaterEndPoints != null && MainWindow.remoteMode is false) {
+                    foreach (var endPoint in MainWindow.repeaterEndPoints) {
+                        try {
+                            UDPMessaging.SendToEndPoint(packet, endPoint);
+                        }
+                        catch { }
+                    }
+                }
 
                 // encrypt data from datagram
                 double encryptedPositionX = BitConverter.ToDouble(packet, 1);
@@ -130,9 +142,6 @@ namespace CustomDesktopShell {
                 }
             };
         }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        [SkipLocalsInit]
         private void AllowDragMoveMap() {
             Task.Run([MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
             [SkipLocalsInit] async () => {
@@ -157,9 +166,92 @@ namespace CustomDesktopShell {
                 }
             });
         }
+        private void AllowControls() {
+            //by buttons
+            ZoomInButton.Click += (_, _) => {
+                lerpedMapWidth += 128;
+                if (lerpedMapWidth > ETALON_NEEDED_WIDTH * 2f) lerpedMapWidth = ETALON_NEEDED_WIDTH * 2f;
+            };
+            ZoomOutButton.Click += (_, _) => {
+                lerpedMapWidth -= 128;
+                if (lerpedMapWidth < ETALON_NEEDED_WIDTH / 5) lerpedMapWidth = ETALON_NEEDED_WIDTH / 5;
+            };
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        [SkipLocalsInit]
+            //by mouse
+            AirMapImage.MouseLeftButtonDown += (_, _) => {
+                cachedMapOffset = new Point() {
+                    Y = AirMapScrollViewer.VerticalOffset,
+                    X = AirMapScrollViewer.HorizontalOffset
+                };
+                cachedMousePos = Mouse.GetPosition(this);
+                mapDragMove = true;
+                MainGrid.Dispatcher.Invoke(() => { AirMapImage.Cursor = Cursors.SizeAll; });
+            };
+
+            AirMapImage.MouseLeftButtonUp += (_, _) => {
+                mapDragMove = false;
+                MainGrid.Dispatcher.Invoke(() => { AirMapImage.Cursor = Cursors.Arrow; });
+            };
+
+            AirMapImage.MouseLeave += (_, _) => {
+                mapDragMove = false;
+                MainGrid.Dispatcher.Invoke(() => { AirMapImage.Cursor = Cursors.Hand; });
+            };
+
+            StatisticRecordButton.Click += (_, _) => {
+                ToggleRecording();
+            };
+
+            //by wtf i don't rememba
+            AirMapScrollViewer.PreviewMouseWheel += (sender, e) => {
+                e.Handled = true;
+                lerpedMapWidth += e.Delta * 2;
+
+                if (lerpedMapWidth > ETALON_NEEDED_WIDTH * 3f) lerpedMapWidth = ETALON_NEEDED_WIDTH * 3f;
+                if (lerpedMapWidth < ETALON_NEEDED_WIDTH / 8) lerpedMapWidth = ETALON_NEEDED_WIDTH / 8;
+            };
+        }
+        private void QueueLoop() {
+            Task.Run(async () => {
+                while (true) {
+
+                    await Task.Delay(1);
+                    if (mapObjectsUpdatingQueue.Count <= 0) continue;
+
+                    for (ushort step = 0; step < mapObjectsUpdatingQueue.Count; step++) {
+                        MapObject enq = mapObjectsUpdatingQueue.Dequeue();
+
+                        // if enq is dead -> continue
+                        if (enq.uiElement is null) {
+                            enq.isQueueable = false;
+                            continue;
+                        }
+
+                        if (DataRecorder.enabled is false && enq.name is "point") {
+                            await Dispatcher.BeginInvoke(() => {
+
+                                // free all objects, declared as "point", if record is disabled
+                                if (DataRecorder.enabled is false && enq.name is "point") {
+                                    enq.Free();
+                                    return;
+                                }
+                            });
+                        }
+
+                        else {
+                            await Dispatcher.BeginInvoke(() => {
+                                enq.UpdateLocation();
+                            });
+                        }
+
+                        // if enq still alive -> return instance to queue
+                        if (enq.isQueueable) {
+                            mapObjectsUpdatingQueue.Enqueue(enq);
+                        }
+                    }
+                }
+            });
+        }
         private void ResizeMap() {
             // map size applying
             AirMapImage.Width = currentMapWidth;
@@ -173,9 +265,6 @@ namespace CustomDesktopShell {
             AirMapContentGrid.Height = AirMapImage.Height;
             AirMapContentGrid.Width = AirMapImage.Width;
         }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        [SkipLocalsInit]
         private void UpdateWorld() {
 
             // run infinity world updating
@@ -217,150 +306,6 @@ namespace CustomDesktopShell {
                 }
             });
         }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        [SkipLocalsInit]
-        private void AllowControls() {
-            //by buttons
-            ZoomInButton.Click += (_, _) => {
-                lerpedMapWidth += 128;
-                if (lerpedMapWidth > ETALON_NEEDED_WIDTH * 2f) lerpedMapWidth = ETALON_NEEDED_WIDTH * 2f;
-            };
-            ZoomOutButton.Click += (_, _) => {
-                lerpedMapWidth -= 128;
-                if (lerpedMapWidth < ETALON_NEEDED_WIDTH / 5) lerpedMapWidth = ETALON_NEEDED_WIDTH / 5;
-            };
-
-            //by mouse
-            AirMapImage.MouseLeftButtonDown += (_, _) => {
-                cachedMapOffset = new Point() {
-                    Y = AirMapScrollViewer.VerticalOffset,
-                    X = AirMapScrollViewer.HorizontalOffset
-                };
-                cachedMousePos = Mouse.GetPosition(this);
-                mapDragMove = true;
-                MainGrid.Dispatcher.Invoke(() => { AirMapImage.Cursor = Cursors.SizeAll; });
-            };
-
-            AirMapImage.MouseLeftButtonUp += (_, _) => {
-                mapDragMove = false;
-                MainGrid.Dispatcher.Invoke(() => { AirMapImage.Cursor = Cursors.Arrow; });
-            };
-
-            AirMapImage.MouseLeave += (_, _) => {
-                mapDragMove = false;
-                MainGrid.Dispatcher.Invoke(() => { AirMapImage.Cursor = Cursors.Hand; });
-            };
-
-            StatisticRecordButton.Click += (_, _) => {
-                ToggleRecording();
-            };
-
-            //by wtf i don't rememba
-            AirMapScrollViewer.PreviewMouseWheel += (sender, e) => {
-                e.Handled = true;
-                lerpedMapWidth += e.Delta > 0 ? 128 : -128;
-
-                if (lerpedMapWidth > ETALON_NEEDED_WIDTH * 3f) lerpedMapWidth = ETALON_NEEDED_WIDTH * 3f;
-                if (lerpedMapWidth < ETALON_NEEDED_WIDTH / 8) lerpedMapWidth = ETALON_NEEDED_WIDTH / 8;
-            };
-        }
-
-        public void ToggleRecording() {
-            if (MainWindow.remoteMode) return;
-            DataRecorder.enabled = !DataRecorder.enabled;
-
-            StatisticRecordButtonTextBox.Text = $"{(DataRecorder.enabled is false ? "Запись" : "Остановить")}";
-
-            if (DataRecorder.enabled is false) {
-
-                XMLOutputEntity.DrawGraph(DataRecorder.recordedData.ToArray());
-                DataRecorder.recordedData.Clear();
-
-                GC.Collect(2, GCCollectionMode.Aggressive, true, true);
-            }
-            else {
-                DataRecorder.recordedData.Clear();
-                EncryptedSTData.Data.recorded_second = 0;
-            }
-        }
-
-        public void EnableRecording() {
-            if (MainWindow.remoteMode) return;
-            if (DataRecorder.enabled is true) return;
-
-            DataRecorder.enabled = true;
-
-            StatisticRecordButtonTextBox.Text = "Остановить";
-
-            DataRecorder.recordedData.Clear();
-            EncryptedSTData.Data.recorded_second = 0;
-        }
-
-        public void DisableRecording() {
-            if (MainWindow.remoteMode) return;
-            if (DataRecorder.enabled is false) return;
-            DataRecorder.enabled = false;
-
-            StatisticRecordButtonTextBox.Text = "Запись";
-
-            XMLOutputEntity.DrawGraph(DataRecorder.recordedData.ToArray());
-            DataRecorder.recordedData.Clear();
-
-            GC.Collect(2, GCCollectionMode.Aggressive, true, true);
-        }
-
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        [SkipLocalsInit]
-        private void QueueLoop() {
-            Task.Run([MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-            [SkipLocalsInit] async () => {
-                while (true) {
-
-                    await Task.Delay(1);
-                    if (mapObjectsUpdatingQueue.Count <= 0) continue;
-
-                    for (ushort step = 0; step < mapObjectsUpdatingQueue.Count; step++) {
-
-                        MapObject enq = mapObjectsUpdatingQueue.Dequeue();
-
-                        // if enq is dead -> continue
-                        if (enq.uiElement is null) {
-                            enq.isQueueable = false;
-                            continue;
-                        }
-
-                        if (DataRecorder.enabled is false && enq.name is "point") {
-                            await Dispatcher.BeginInvoke([MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-                            [SkipLocalsInit] () => {
-
-                                // free all objects, declared as "point", if record is disabled
-                                if (DataRecorder.enabled is false && enq.name is "point") {
-                                    enq.Free();
-                                    return;
-                                }
-                            });
-                        }
-
-                        else {
-                            await Dispatcher.BeginInvoke([MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-                            [SkipLocalsInit] () => {
-                                enq.UpdateLocation();
-                            });
-                        }
-
-                        // if enq still alive -> return instance to queue
-                        if (enq.isQueueable) {
-                            mapObjectsUpdatingQueue.Enqueue(enq);
-                        }
-                    }
-                }
-            });
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        [SkipLocalsInit]
         private void StartPointCreate() {
             Task.Run([MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
             [SkipLocalsInit] async () => {
@@ -393,18 +338,57 @@ namespace CustomDesktopShell {
                 }
             });
         }
+        public void ToggleRecording() {
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        [SkipLocalsInit]
+            DataRecorder.enabled = !DataRecorder.enabled;
+
+            StatisticRecordButtonTextBox.Text = $"{(DataRecorder.enabled is false ? "Запись" : "Остановить")}";
+
+            if (DataRecorder.enabled is false) {
+
+                if (MainWindow.remoteMode is false) {
+                    XMLOutputEntity.DrawGraph(DataRecorder.recordedData.ToArray());
+                    DataRecorder.recordedData.Clear();
+
+                    GC.Collect(2, GCCollectionMode.Aggressive, true, true);
+                }
+                else {
+                    DataRecorder.recordedData.Clear();
+                    GC.Collect(2, GCCollectionMode.Aggressive, true, true);
+                }
+
+            }
+            else {
+                DataRecorder.recordedData.Clear();
+                EncryptedSTData.Data.recorded_second = 0;
+            }
+        }
+        public void EnableRecording() {
+            if (DataRecorder.enabled is true) return;
+
+            DataRecorder.enabled = true;
+
+            StatisticRecordButtonTextBox.Text = "Остановить";
+
+            DataRecorder.recordedData.Clear();
+            EncryptedSTData.Data.recorded_second = 0;
+        }
+        public void DisableRecording() {
+            if (DataRecorder.enabled is false) return;
+            DataRecorder.enabled = false;
+
+            StatisticRecordButtonTextBox.Text = "Запись";
+
+            if (MainWindow.remoteMode is false) {
+                XMLOutputEntity.DrawGraph(DataRecorder.recordedData.ToArray());
+            }
+            DataRecorder.recordedData.Clear();
+
+            GC.Collect(2, GCCollectionMode.Aggressive, true, true);
+        }
         private void StartRecordTimer() {
 
-            // disable timer on remote mode;
-            if (MainWindow.remoteMode) return;
-
-
-            Task.Run([MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-            [SkipLocalsInit] async () => {
-
+            Task.Run(async () => {
                 while (true) {
                     if (!DataRecorder.enabled) {
                         EncryptedSTData.Data.recorded_second = 0;
@@ -414,11 +398,9 @@ namespace CustomDesktopShell {
                     await Task.Delay(1000);
                     EncryptedSTData.Data.recorded_second++;
 
-                    // DEBUG FUNCTION
-                    //EncryptedSTData.AllRandomize();
-
-                    // WriteAll
-                    DataRecorder.recordedData.Add(EncryptedSTData.WriteEntity());
+                    if (MainWindow.remoteMode is false) {
+                        DataRecorder.recordedData.Add(EncryptedSTData.WriteEntity());
+                    }
                 }
             });
         }
@@ -428,22 +410,20 @@ namespace CustomDesktopShell {
     [SkipLocalsInit]
     internal sealed class MapObject {
         // fields
-        internal Point position;
-        internal Point offset;
-        internal double radioHeight = 0;
-        internal string name = "undefined";
-        internal UIElement? uiElement = null;
         public bool isQueueable = false;
-
         public static readonly BitmapImage defaultIco = new BitmapImage(new Uri($"pack://application:,,,/Images/Widgets/point.png")) {
             CacheOption = BitmapCacheOption.OnLoad,
             CreateOptions = BitmapCreateOptions.PreservePixelFormat,
         };
+        internal double radioHeight = 0;
+        internal string name = "undefined";
+        internal Point position;
+        internal Point offset;
+        internal UIElement? uiElement = null;
 
         // methods
         /// <summary> Main <see cref="UIElement"/> position on map </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        [SkipLocalsInit]
         internal MapObject SetPosition(in Point pos) {
             this.position = pos;
             return this;
@@ -451,7 +431,6 @@ namespace CustomDesktopShell {
 
         /// <summary> Do <see href="position + offset"/></summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        [SkipLocalsInit]
         internal MapObject SetOffset(in Point offset) {
             this.offset = offset;
             return this;
@@ -459,7 +438,6 @@ namespace CustomDesktopShell {
 
         /// <summary> Update <see cref="UIElement"/> position by <see href="main position + offset"/> in world map </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        [SkipLocalsInit]
         internal MapObject UpdateLocation() {
             // world rotation apply (in eulers)
             double angleRadians = AirMapPanel.angle * AirMapPanel.TO_RADIANS_MULTIPLIER;
@@ -483,14 +461,12 @@ namespace CustomDesktopShell {
 
         /// <summary> Apply <see cref="UIElement"/> as reference in <see cref="MapObject.uiElement"/></summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        [SkipLocalsInit]
         internal MapObject SetElement(in UIElement uiElement) {
             this.uiElement = uiElement;
             return this;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        [SkipLocalsInit]
         internal MapObject RotateElement(in double degrees = 0) {
 
             if (uiElement is null || uiElement.GetType() != typeof(Image)) return this;
@@ -505,7 +481,6 @@ namespace CustomDesktopShell {
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        [SkipLocalsInit]
         internal MapObject AddToUpdateQueue() {
             isQueueable = true;
             AirMapPanel.mapObjectsUpdatingQueue.Enqueue(this);
@@ -513,7 +488,6 @@ namespace CustomDesktopShell {
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        [SkipLocalsInit]
         internal void Free() {
             isQueueable = false;
             AirMapPanel.instance.AirMapContentGrid.Children.Remove(this.uiElement);
@@ -522,7 +496,6 @@ namespace CustomDesktopShell {
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        [SkipLocalsInit]
         internal static MapObject Spawn(in double posX = 0, in double posY = 0, in double sizeX = 32, in double sizeY = 32, in string icon = "NaN", in string name = "undefined") {
             Image imageElement = new Image();
             imageElement.MaxWidth = sizeX;

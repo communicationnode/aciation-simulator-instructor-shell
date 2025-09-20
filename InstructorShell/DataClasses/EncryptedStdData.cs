@@ -55,10 +55,14 @@ y[41] = PRIBORS_VIBROSPEED;
 y[42] = PRIBORS_VOLTS;
 y[43] = PRIBORS_AMPERS;
 
+// ADDITIONAL DOUBLES 01.09.2025
+y[44] = PRIBORS_KURS_VERTICAL_G_OFFSET;
+y[45] = PRIBORS_KURS_HORIZONT_K_OFFSET;
  =============================================================================
  */
 
 
+using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -83,41 +87,45 @@ namespace InstructorShell.DataClasses {
             EncryptedSTData.Data.PRIBORS_KREN = BitConverter.ToSingle(datagram, 16);
             EncryptedSTData.Data.PRIBORS_SKOLJEN = 0;//BitConverter.ToSingle(datagram, 20);
             EncryptedSTData.Data.PRIBORS_VY = BitConverter.ToSingle(datagram, 24);
-            EncryptedSTData.Data.PRIBORS_N_1 = 0;//BitConverter.ToSingle(datagram, 28);
-            EncryptedSTData.Data.PRIBORS_N_2 = 0;//BitConverter.ToSingle(datagram, 32);
-            EncryptedSTData.Data.PRIBORS_TEMPERATURE = 0;//BitConverter.ToSingle(datagram, 36);
+            EncryptedSTData.Data.PRIBORS_N_1 = BitConverter.ToSingle(datagram, 28);
+            EncryptedSTData.Data.PRIBORS_N_2 = BitConverter.ToSingle(datagram, 32);
+            EncryptedSTData.Data.PRIBORS_TEMPERATURE = BitConverter.ToSingle(datagram, 36);
 
             //+13 DOUBLES IN DATA BASE (CENTER ROW IN PANEL)
             EncryptedSTData.Data.PRIBORS_BAROM_HEIGHT = BitConverter.ToSingle(datagram, 40);
-            EncryptedSTData.Data.PRIBORS_BAROM_DAVLEN = 0;//BitConverter.ToSingle(datagram, 44);
-            EncryptedSTData.Data.PRIBORS_BAROM_CUR_DAVLEN = 0;//BitConverter.ToSingle(datagram, 48);
-            EncryptedSTData.Data.PRIBORS_KURS = 0;//BitConverter.ToSingle(datagram, 52);
-            EncryptedSTData.Data.PRIBORS_KURS_DEFAULT = 0;//BitConverter.ToSingle(datagram, 56);
-            EncryptedSTData.Data.PRIBORS_KURS_ANGLE_RADIOSTATION = 0;//BitConverter.ToSingle(datagram, 60);
-            EncryptedSTData.Data.PRIBORS_BLANKER_K = 0;//BitConverter.ToSingle(datagram, 64);
-            EncryptedSTData.Data.PRIBORS_BLANKER_G = 0;//BitConverter.ToSingle(datagram, 68);
-            EncryptedSTData.Data.PRIBORS_RADIOCOMPASS = 0;//BitConverter.ToSingle(datagram, 72);
-            EncryptedSTData.Data.PRIBORS_DAVLEN_FUEL = 0;//BitConverter.ToSingle(datagram, 76);
-            EncryptedSTData.Data.PRIBORS_DAVLEN_OIL = 0;//BitConverter.ToSingle(datagram, 80);
-            EncryptedSTData.Data.PRIBORS_TEMPERATURE_OIL = 0;//BitConverter.ToSingle(datagram, 84);
-            EncryptedSTData.Data.PRIBORS_FUEL_VALUE = 0;//BitConverter.ToSingle(datagram, 88);
+            EncryptedSTData.Data.PRIBORS_BAROM_DAVLEN = BitConverter.ToSingle(datagram, 44);
+            EncryptedSTData.Data.PRIBORS_BAROM_CUR_DAVLEN = BitConverter.ToSingle(datagram, 48);
+            EncryptedSTData.Data.PRIBORS_KURS = BitConverter.ToSingle(datagram, 52);
+            EncryptedSTData.Data.PRIBORS_KURS_DEFAULT = BitConverter.ToSingle(datagram, 56);
+            EncryptedSTData.Data.PRIBORS_KURS_ANGLE_RADIOSTATION = BitConverter.ToSingle(datagram, 60);
+            EncryptedSTData.Data.PRIBORS_BLANKER_K = BitConverter.ToSingle(datagram, 64);
+            EncryptedSTData.Data.PRIBORS_BLANKER_G = BitConverter.ToSingle(datagram, 68);
+            EncryptedSTData.Data.PRIBORS_RADIOCOMPASS = BitConverter.ToSingle(datagram, 72);
+            EncryptedSTData.Data.PRIBORS_DAVLEN_FUEL = BitConverter.ToSingle(datagram, 76);
+            EncryptedSTData.Data.PRIBORS_DAVLEN_OIL = BitConverter.ToSingle(datagram, 80);
+            EncryptedSTData.Data.PRIBORS_TEMPERATURE_OIL = BitConverter.ToSingle(datagram, 84);
+            EncryptedSTData.Data.PRIBORS_FUEL_VALUE = BitConverter.ToSingle(datagram, 88);
 
             //+15 DOUBLES IN DATA BASE (BOTTOM ROW IN PANEL)
-            EncryptedSTData.Data.PRIBORS_RV_HEIGHT = 0;//BitConverter.ToSingle(datagram, 92);
-            EncryptedSTData.Data.PRIBORS_RV_DANGER_HEIGHT = 0;//BitConverter.ToSingle(datagram, 96);
-            EncryptedSTData.Data.PRIBORS_PPD_DISTANCE = 0;//itConverter.ToSingle(datagram, 100);
-            EncryptedSTData.Data.PRIBORS_TTEK_HOUR = 0;//BitConverter.ToSingle(datagram, 104);
-            EncryptedSTData.Data.PRIBORS_TTEK_MIN = 0;//BitConverter.ToSingle(datagram, 108);
-            EncryptedSTData.Data.PRIBORS_TTEK_SEC = 0;//BitConverter.ToSingle(datagram, 112);
-            EncryptedSTData.Data.PRIBORS_TPOL_HOUR = 0;//BitConverter.ToSingle(datagram, 116);
-            EncryptedSTData.Data.PRIBORS_TPOL_MIN = 0;//BitConverter.ToSingle(datagram, 120);
-            EncryptedSTData.Data.PRIBORS_TSEK_MIN = 0;//BitConverter.ToSingle(datagram, 124);
-            EncryptedSTData.Data.PRIBORS_TSEK_SEC = 0;//BitConverter.ToSingle(datagram, 128);
-            EncryptedSTData.Data.PRIBORS_KABINE_HEIGHT = 0;//BitConverter.ToSingle(datagram, 132);
-            EncryptedSTData.Data.PRIBORS_KABINE_DAVLEN_CHANGES = 0;//BitConverter.ToSingle(datagram, 136);
-            EncryptedSTData.Data.PRIBORS_VIBROSPEED = 0;//BitConverter.ToSingle(datagram, 140);
-            EncryptedSTData.Data.PRIBORS_VOLTS = 0;//BitConverter.ToSingle(datagram, 144);
-            EncryptedSTData.Data.PRIBORS_AMPERS = 0;//BitConverter.ToSingle(datagram, 148);
+            EncryptedSTData.Data.PRIBORS_RV_HEIGHT = BitConverter.ToSingle(datagram, 92);
+            EncryptedSTData.Data.PRIBORS_RV_DANGER_HEIGHT = BitConverter.ToSingle(datagram, 96);
+            EncryptedSTData.Data.PRIBORS_PPD_DISTANCE = BitConverter.ToSingle(datagram, 100);
+            EncryptedSTData.Data.PRIBORS_TTEK_HOUR = BitConverter.ToSingle(datagram, 104);
+            EncryptedSTData.Data.PRIBORS_TTEK_MIN = BitConverter.ToSingle(datagram, 108);
+            EncryptedSTData.Data.PRIBORS_TTEK_SEC = BitConverter.ToSingle(datagram, 112);
+            EncryptedSTData.Data.PRIBORS_TPOL_HOUR = BitConverter.ToSingle(datagram, 116);
+            EncryptedSTData.Data.PRIBORS_TPOL_MIN = BitConverter.ToSingle(datagram, 120);
+            EncryptedSTData.Data.PRIBORS_TSEK_MIN = BitConverter.ToSingle(datagram, 124);
+            EncryptedSTData.Data.PRIBORS_TSEK_SEC = BitConverter.ToSingle(datagram, 128);
+            EncryptedSTData.Data.PRIBORS_KABINE_HEIGHT = BitConverter.ToSingle(datagram, 132);
+            EncryptedSTData.Data.PRIBORS_KABINE_DAVLEN_CHANGES = BitConverter.ToSingle(datagram, 136);
+            EncryptedSTData.Data.PRIBORS_VIBROSPEED = BitConverter.ToSingle(datagram, 140);
+            EncryptedSTData.Data.PRIBORS_VOLTS = BitConverter.ToSingle(datagram, 144);
+            EncryptedSTData.Data.PRIBORS_AMPERS = BitConverter.ToSingle(datagram, 148);
+
+            // ADDITIONAL DOUBLES 01.09.2025
+            EncryptedSTData.Data.PRIBORS_KURS_VERTICAL_G_OFFSET = BitConverter.ToSingle(datagram, 152);
+            EncryptedSTData.Data.PRIBORS_KURS_HORIZONT_K_OFFSET = BitConverter.ToSingle(datagram, 156);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
@@ -127,34 +135,34 @@ namespace InstructorShell.DataClasses {
             Random random = new Random();
 
             //+8 DOUBLES IN DATA BASE (TOP ROW IN PANEL)
-            EncryptedSTData.Data.PRIBORS_AIRSPEED = random.NextSingle() * 2f;
-            EncryptedSTData.Data.PRIBORS_TANGAJ = random.NextSingle() * 0.2f;
-            EncryptedSTData.Data.PRIBORS_KREN = random.NextSingle() * 0.8f;
+            EncryptedSTData.Data.PRIBORS_AIRSPEED = random.NextSingle() * 1200f;
+            EncryptedSTData.Data.PRIBORS_TANGAJ = -90f + (random.NextSingle() * 180f);
+            EncryptedSTData.Data.PRIBORS_KREN = -180 + (random.NextSingle() * 360f);
             EncryptedSTData.Data.PRIBORS_SKOLJEN = random.NextSingle();
-            EncryptedSTData.Data.PRIBORS_VY = random.NextSingle() * 4f;
-            EncryptedSTData.Data.PRIBORS_N_1 = random.NextSingle();
-            EncryptedSTData.Data.PRIBORS_N_2 = random.NextSingle();
-            EncryptedSTData.Data.PRIBORS_TEMPERATURE = random.NextSingle();
+            EncryptedSTData.Data.PRIBORS_VY = -80 + (random.NextSingle() * 160f);
+            EncryptedSTData.Data.PRIBORS_N_1 = random.NextSingle() * 100f;
+            EncryptedSTData.Data.PRIBORS_N_2 = random.NextSingle() * 100f;
+            EncryptedSTData.Data.PRIBORS_TEMPERATURE = random.NextSingle() * 900f;
 
             //+13 DOUBLES IN DATA BASE (CENTER ROW IN PANEL)
-            EncryptedSTData.Data.PRIBORS_BAROM_HEIGHT = random.NextSingle();
-            EncryptedSTData.Data.PRIBORS_BAROM_DAVLEN = random.NextSingle();
+            EncryptedSTData.Data.PRIBORS_BAROM_HEIGHT = random.NextSingle() * 5000f;
+            EncryptedSTData.Data.PRIBORS_BAROM_DAVLEN = 670f + random.NextSingle() * 110f;
             EncryptedSTData.Data.PRIBORS_BAROM_CUR_DAVLEN = random.NextSingle();
-            EncryptedSTData.Data.PRIBORS_KURS = random.NextSingle();
-            EncryptedSTData.Data.PRIBORS_KURS_DEFAULT = random.NextSingle();
-            EncryptedSTData.Data.PRIBORS_KURS_ANGLE_RADIOSTATION = random.NextSingle();
-            EncryptedSTData.Data.PRIBORS_BLANKER_K = random.NextSingle();
-            EncryptedSTData.Data.PRIBORS_BLANKER_G = random.NextSingle();
-            EncryptedSTData.Data.PRIBORS_RADIOCOMPASS = random.NextSingle();
-            EncryptedSTData.Data.PRIBORS_DAVLEN_FUEL = random.NextSingle();
-            EncryptedSTData.Data.PRIBORS_DAVLEN_OIL = random.NextSingle();
-            EncryptedSTData.Data.PRIBORS_TEMPERATURE_OIL = random.NextSingle();
-            EncryptedSTData.Data.PRIBORS_FUEL_VALUE = random.NextSingle();
+            EncryptedSTData.Data.PRIBORS_KURS = random.NextSingle() * 360;
+            EncryptedSTData.Data.PRIBORS_KURS_DEFAULT = random.NextSingle() * 360;
+            EncryptedSTData.Data.PRIBORS_KURS_ANGLE_RADIOSTATION = random.NextSingle() * 360;
+            EncryptedSTData.Data.PRIBORS_BLANKER_K = (float)Math.Round(random.NextSingle() * 2f);
+            EncryptedSTData.Data.PRIBORS_BLANKER_G = (float)Math.Round(random.NextSingle() * 2f);
+            EncryptedSTData.Data.PRIBORS_RADIOCOMPASS = -180 + (random.NextSingle() * 360f);
+            EncryptedSTData.Data.PRIBORS_DAVLEN_FUEL = random.NextSingle() * 100f;
+            EncryptedSTData.Data.PRIBORS_DAVLEN_OIL = -0.3f + random.NextSingle() * 6.3f;
+            EncryptedSTData.Data.PRIBORS_TEMPERATURE_OIL = -70 + (random.NextSingle() * 220f);
+            EncryptedSTData.Data.PRIBORS_FUEL_VALUE = random.NextSingle() * 825f;
 
             //+15 DOUBLES IN DATA BASE (BOTTOM ROW IN PANEL)
-            EncryptedSTData.Data.PRIBORS_RV_HEIGHT = random.NextSingle();
+            EncryptedSTData.Data.PRIBORS_RV_HEIGHT = random.NextSingle() * 750f;
             EncryptedSTData.Data.PRIBORS_RV_DANGER_HEIGHT = random.NextSingle();
-            EncryptedSTData.Data.PRIBORS_PPD_DISTANCE = random.NextSingle();
+            EncryptedSTData.Data.PRIBORS_PPD_DISTANCE = random.NextSingle() * 10f;
             EncryptedSTData.Data.PRIBORS_TTEK_HOUR = random.NextSingle();
             EncryptedSTData.Data.PRIBORS_TTEK_MIN = random.NextSingle();
             EncryptedSTData.Data.PRIBORS_TTEK_SEC = random.NextSingle();
@@ -163,10 +171,12 @@ namespace InstructorShell.DataClasses {
             EncryptedSTData.Data.PRIBORS_TSEK_MIN = random.NextSingle();
             EncryptedSTData.Data.PRIBORS_TSEK_SEC = random.NextSingle();
             EncryptedSTData.Data.PRIBORS_KABINE_HEIGHT = random.NextSingle();
-            EncryptedSTData.Data.PRIBORS_KABINE_DAVLEN_CHANGES = random.NextSingle();
-            EncryptedSTData.Data.PRIBORS_VIBROSPEED = random.NextSingle();
-            EncryptedSTData.Data.PRIBORS_VOLTS = random.NextSingle();
-            EncryptedSTData.Data.PRIBORS_AMPERS = random.NextSingle();
+            EncryptedSTData.Data.PRIBORS_KABINE_DAVLEN_CHANGES = -0.4f + random.NextSingle();
+            EncryptedSTData.Data.PRIBORS_VIBROSPEED = random.NextSingle() * 100f;
+            EncryptedSTData.Data.PRIBORS_VOLTS = random.NextSingle() * 40f;
+            EncryptedSTData.Data.PRIBORS_AMPERS = random.NextSingle() * 40f;
+            EncryptedSTData.Data.PRIBORS_KURS_VERTICAL_G_OFFSET = -1f + random.NextSingle() * 2f;
+            EncryptedSTData.Data.PRIBORS_KURS_HORIZONT_K_OFFSET = -1f + random.NextSingle() * 2f;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
@@ -197,8 +207,11 @@ namespace InstructorShell.DataClasses {
         public float PRIBORS_BAROM_HEIGHT { get; set; }
         public float PRIBORS_BAROM_DAVLEN { get; set; }
         public float PRIBORS_BAROM_CUR_DAVLEN { get; set; }
+        /// <summary> NPP.kurs </summary>
         public float PRIBORS_KURS { get; set; }
+        /// <summary> NPP.kurs_zad; </summary>
         public float PRIBORS_KURS_DEFAULT { get; set; }
+        /// <summary> NPP.kur; </summary>
         public float PRIBORS_KURS_ANGLE_RADIOSTATION { get; set; }
         public float PRIBORS_BLANKER_K { get; set; }
         public float PRIBORS_BLANKER_G { get; set; }
@@ -224,6 +237,10 @@ namespace InstructorShell.DataClasses {
         public float PRIBORS_VIBROSPEED { get; set; }
         public float PRIBORS_VOLTS { get; set; }
         public float PRIBORS_AMPERS { get; set; }
+
+        // ADDITIONAL DOUBLES 01.09.2025
+        public float PRIBORS_KURS_VERTICAL_G_OFFSET { get; set; }
+        public float PRIBORS_KURS_HORIZONT_K_OFFSET { get; set; }
 
         #endregion
     }

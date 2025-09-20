@@ -13,7 +13,7 @@
 
 ----------------------------------------
 
-<div align="center"> <img width="512" src="git-res/preview.png"> </div>
+<div align="center"> <img width="512" src="git-res/animated_preview.gif"> </div>
 
 ----------------------------------------
 # About Project
@@ -31,15 +31,24 @@ The instructor controls the student's flight using a specially designed instruct
 
 ----------------------------------------
 
-<div align="center"> <img width="512" src="git-res/real-preview.png"> </div>
+<div align="center"> <img width="512" src="git-res/animated_preview2.gif"> </div>
 
 ----------------------------------------
 
 # About Functionality
 
+> [!WARNING]
+>
+> This repository only contains a portion of the system. Full functionality cannot be published.
+
 The software functionality includes:
 
-* weather conditions management in the simulation;
-* reading and outputting data from the flight simulator cockpit controls;
-* displaying the current aircraft location on the map.
+* Weather conditions management in the simulation;
+* Reading and outputting data from the flight simulator cockpit controls;
+* Displaying the current aircraft location on the map;
+* Duplicating the program and its functionality on a third-party device using Wi-Fi;
+* Display of the aircraft instrument panel;
+* Flight recording and objective flight control output in Excel format.
+
+
 

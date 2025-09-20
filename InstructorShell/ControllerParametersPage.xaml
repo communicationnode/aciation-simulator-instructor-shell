@@ -88,22 +88,21 @@
                             </Border>
 
                             <Border Name="controller_process_buttons_border" Grid.Row="4" Margin="3" CornerRadius="16" Background="#FF272727">
-                                <StackPanel Name="controller_process_stackpanel" Orientation="Horizontal" Margin="8">
+                                <StackPanel Name="controller_process_stackpanel" Orientation="Horizontal" HorizontalAlignment="Center" Margin="8">
 
-                                    <Viewbox x:Name="runSimulationButttonViewBox" MinWidth="94" Stretch="Uniform">
-
-                                        <Button x:Name="runSimulationButtton" Height="30" Width="94">
+                                    <Viewbox x:Name="runSimulationButttonViewBox" MinWidth="77" Stretch="Uniform">
+                                        <Button x:Name="runSimulationButtton" Height="30" Width="240">
                                             <TextBlock TextWrapping="Wrap" FontStretch="Expanded"><Run Text="Запустить симуляцию"/></TextBlock>
                                         </Button>
-
                                     </Viewbox>
-                                    <Viewbox Name="killTargetsImmediatelyButtonViewBox" MinWidth="128" Stretch="Uniform">
 
-                                        <Button x:Name="killTargetsImmediatelyButton" Background="#BF860000" Height="30" Width="128">
+                                    <Viewbox Name="killTargetsImmediatelyButtonViewBox" Visibility="Collapsed" MinWidth="128" Stretch="Uniform">
+                                        <Button x:Name="killTargetsImmediatelyButton" Background="#BF860000" Height="30" Width="240">
                                             <TextBlock TextWrapping="Wrap" FontStretch="Expanded" Foreground="#FFFFF0F0"><Run Text="Аварийно завершить симуляцию"/></TextBlock>
                                         </Button>
-
                                     </Viewbox>
+
+                                    
 
                                 </StackPanel>
                             </Border>
@@ -140,12 +139,27 @@
                             <svg:SvgViewbox Grid.Row="1" MaxHeight="50px" MaxWidth="50px" x:Name="pointer_circle" Source="/Images/widgets/pointer.svg" IsHitTestVisible="False" Margin="74,47,7,60" />
                             <svg:SvgViewbox Grid.Row="1" MaxHeight="50px" MaxWidth="50px" x:Name="pointer_vertical2" Source="/Images/widgets/pointer.svg"  RenderTransformOrigin="0,0" IsHitTestVisible="False" Margin="74,226,7,13"/>
                         </Grid>
-
-
                     </Grid>
                 </Viewbox>
+
+                <Grid x:Name="additionalControlsGrid" Margin="38,390,380,10">
+                    <Border x:Name="additionalControlsBorder" BorderThickness="1" CornerRadius="12,12,12,12" Background="#FF272727"/>
+                    <StackPanel x:Name="additionalControlsStackPanel" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+
+                        <Viewbox Name="recalibrationButtonViewBox" Visibility="Visible" MinWidth="137" Stretch="Uniform" VerticalAlignment="Bottom">
+                            <Button x:Name="recalibrationButton" Height="30" Width="150">
+                                <TextBlock TextWrapping="Wrap" FontStretch="Expanded" TextAlignment="Center" Foreground="#FFFFF0F0"><Run Text="Калибровать управление"/></TextBlock>
+                            </Button>
+                        </Viewbox>
+
+                        <Viewbox Name="cameraResetButtonViewBox" Visibility="Visible" MinWidth="137" Stretch="Uniform" VerticalAlignment="Bottom">
+                            <Button x:Name="cameraResetButton" Height="30" Width="150">
+                                <TextBlock TextWrapping="Wrap" FontStretch="Expanded" TextAlignment="Center" Foreground="#FFFFF0F0"><Run Text="Выровнять камеру"/></TextBlock>
+                            </Button>
+                        </Viewbox>
+                    </StackPanel>
+                </Grid>
             </Grid>
         </Viewbox>
-
     </Grid>
 </Page>

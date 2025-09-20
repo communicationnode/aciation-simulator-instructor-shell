@@ -2,7 +2,6 @@
 using CustomDesktopShell.UDPWork;
 using InstructorShell.DataClasses;
 using InstructorShell.Processes;
-using Microsoft.VisualBasic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -19,40 +18,41 @@ namespace InstructorShell {
     public partial class ControllerParametersPage : Page {
 
         // fields
-        double savedStartupVerticalBarHeight;
-        double savedStartupCircleBarHeight;
-        double savedStartupCircleBarWidth;
-        float rusUpDown = 0.001234f;
-        float rusLeftRight = 0.001234f;
+        byte tormoza = 0;
         float rud = 0.001234f;
         float pedali = 0.001234f;
-        byte tormoza = 0;
-
-        string[] processTargets;
+        float rusUpDown = 0.001234f;
+        float rusLeftRight = 0.001234f;
+        double savedStartupCircleBarWidth;
+        double savedStartupCircleBarHeight;
+        double savedStartupVerticalBarHeight;
         string restartEngineAddressData;
+        string[] processTargets;
         DateTime lastProcessLaunchDateTime = DateTime.Now;
         DateTime lastRestartEngineDateTime = DateTime.Now;
-
-        ToolTipText temperaturesToolTip = new ToolTipText("GPU: <loading...>\nCPU: <loading...>");
         ToolTipText rusToolTip = new ToolTipText("Значение руса: ");
         ToolTipText rudToolTip = new ToolTipText("Значение руда: ");
         ToolTipText pedaliToolTip = new ToolTipText("Значение педалей: ");
+        ToolTipText temperaturesToolTip = new ToolTipText("GPU: <loading...>\nCPU: <loading...>");
+        public static ToolTipText debuggerToolTipText = new ToolTipText("Системная информация");
+
+        // all finded process targets
+        List<RunningAppInfo> findedTargets = new List<RunningAppInfo>();
+
 
         // constructor
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        [SkipLocalsInit]
         public ControllerParametersPage() {
             InitializeComponent();
 
+            MainWindow.instance.SetTooltip(circle_bar, rusToolTip);
+            MainWindow.instance.SetTooltip(vertical_bar, rudToolTip);
+            MainWindow.instance.SetTooltip(text1, debuggerToolTipText);
+            MainWindow.instance.SetTooltip(vertical_bar2, pedaliToolTip);
             MainWindow.instance.SetTooltip(temperatureIcon, temperaturesToolTip);
+            MainWindow.instance.SetTooltip(restartEngineButton, new ToolTipText("Упрощенный перезапуск двигателя."));
             MainWindow.instance.SetTooltip(turboIcon, new ToolTipText($"Это поле указывает на текущее состояние турбо."));
             MainWindow.instance.SetTooltip(dvigatelIcon, new ToolTipText("Это поле указывает на текущее состояние двигателя."));
             MainWindow.instance.SetTooltip(killTargetsImmediatelyButton, new ToolTipText("Если симуляция была выключена, а кнопка все еще активна, нажмите на нее, чтобы полностью прервать все фоновые процессы программного обеспечения симуляции."));
-            MainWindow.instance.SetTooltip(runSimulationButtton, new ToolTipText("Рекомендуемый способ запустить процедуру симуляции"));
-            MainWindow.instance.SetTooltip(circle_bar, rusToolTip);
-            MainWindow.instance.SetTooltip(vertical_bar, rudToolTip);
-            MainWindow.instance.SetTooltip(vertical_bar2, pedaliToolTip);
-            MainWindow.instance.SetTooltip(restartEngineButton, new ToolTipText("Упрощенный перезапуск двигателя. Эта функция является экспериментальной и проходит этап испытаний"));
 
             TemperaturesMonitoring();
             RefreshBarsScale();
@@ -63,29 +63,28 @@ namespace InstructorShell {
             restartEngineAddressData = File.ReadAllLines($@"Configs\restartEngineAddress.ini")[0];
 
             killTargetsImmediatelyButtonViewBox.Visibility = System.Windows.Visibility.Collapsed;
-            //restartEngineButton.Visibility = System.Windows.Visibility.Collapsed;
-            //PointersTest();
         }
 
-        // methods
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        [SkipLocalsInit]
+        // methods
         private void SubscribeToUDPPackets() {
+
+            // check 202 packet type [controllers and other fuck]
             UDPMessaging.OnMessageGet += (message) => {
 
                 if (message[0] == 202) {
 
-                    Dispatcher.Invoke([MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-                    [SkipLocalsInit] () => {
+                    // repeat to remote
+                    if (MainWindow.repeaterEndPoints != null && MainWindow.remoteMode is false) {
+                        UDPMessaging.SendToRepeaters(message);
+                    }
 
+                    Dispatcher.Invoke(() => {
                         rusUpDown = BitConverter.ToSingle(message, 1);
                         rusLeftRight = BitConverter.ToSingle(message, 5);
                         rud = BitConverter.ToSingle(message, 9);
                         pedali = BitConverter.ToSingle(message, 13);
-
                         tormoza = message[21];
-
                         UpdatePointersScale();
                         UpdatePointersTransform();
                         UpdateTooltips();
@@ -93,12 +92,16 @@ namespace InstructorShell {
                 }
             };
 
+            // check 203 packet type
             UDPMessaging.OnMessageGet += (message) => {
-
                 if (message[0] == 203) {
 
-                    Dispatcher.Invoke(() => {
+                    // repeat to remote
+                    if (MainWindow.repeaterEndPoints != null && MainWindow.remoteMode is false) {
+                        UDPMessaging.SendToRepeaters(message);
+                    }
 
+                    Dispatcher.Invoke(() => {
                         //  TUBRO    => message[4];
                         //  DVIGATEL => message[5];
 
@@ -116,10 +119,69 @@ namespace InstructorShell {
                     EncryptedSTData.UpdateDataBySpecificDatagram(message);
                 }
             };
-        }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        [SkipLocalsInit]
+            // check 155 packet type
+            UDPMessaging.OnMessageGet += (message) => {
+                try {
+                    Dispatcher.Invoke(() => {
+                        if (message[0] == 155) {
+                            switch (message[1]) {
+                                //remote RUN simulation
+                                case 1:
+                                    RunSimulationProcess();
+                                    break;
+                                //remote KILL simulation
+                                case 2:
+                                    KillSimulationProcess();
+                                    break;
+                                //remote RESTART engine
+                                case 3:
+                                    RestartSimulationEngine();
+                                    break;
+                            }
+                        }
+                    });
+                }
+                catch { }
+            };
+
+            // check 154 packet type
+            UDPMessaging.OnMessageGet += (message) => {
+                Dispatcher.Invoke(() => {
+                    //MainWindow.instance.Title = $"{message[0]}, {message[1]}, [{DateTime.Now}]";
+                    if (message[0] == 154) {
+                        switch (message[1]) {
+                            //remote show KILL button
+                            case 1:
+                                runSimulationButttonViewBox.Visibility = System.Windows.Visibility.Collapsed;
+                                killTargetsImmediatelyButtonViewBox.Visibility = System.Windows.Visibility.Visible;
+                                break;
+                            //remote show RUN button
+                            case 2:
+                                runSimulationButttonViewBox.Visibility = System.Windows.Visibility.Visible;
+                                killTargetsImmediatelyButtonViewBox.Visibility = System.Windows.Visibility.Collapsed;
+                                break;
+                        }
+                    }
+                });
+            };
+            // check 41 packet type
+            UDPMessaging.OnMessageGet += (message) => {
+                Dispatcher.Invoke(() => {
+                    if (message[0] == 41) {
+                        UDPMessaging.SendToEndPoint(new byte[] { 41, 1 }, new IPEndPoint(IPAddress.Parse("127.0.0.1"), 5600));
+                    }
+                    else if (message[0] == 42) {
+                        UDPMessaging.SendToEndPoint(new byte[] { 42, 1 }, new IPEndPoint(IPAddress.Parse("127.0.0.1"), 5687));
+                    }
+                    else if (message[0] == 43) {
+                        recalibrationButton.Background = message[1] == 2 ? new SolidColorBrush(Color.FromArgb(138, 71, 71, 71)) : new SolidColorBrush(Color.FromArgb(138, 215, 25, 25));
+                        recalibrationButton.Content = message[1] == 2 ? "Калибровать\nуправление" : "Завершить\nкалибровку";
+                    }
+                });
+            };
+
+        }
         private void SubcribeToControls() {
             // local fieds
 
@@ -127,12 +189,7 @@ namespace InstructorShell {
             Action<string> changeTextOnRunButton = (newText) => { (runSimulationButtton.Content as TextBlock).Text = newText; };
             Action<string> changeTextOnTerminateButton = (newText) => { (killTargetsImmediatelyButton.Content as TextBlock).Text = newText; };
 
-            // all finded process targets
-            List<RunningAppInfo> findedTargets = new List<RunningAppInfo>();
-
-
             // events
-
             runSimulationButtton.Click += (_, _) => {
 
                 // base protection for multiply launching
@@ -142,36 +199,26 @@ namespace InstructorShell {
                 }
                 lastProcessLaunchDateTime = DateTime.Now;
 
-
-                changeTextOnRunButton.Invoke("Попытка запустить процесс");
-
-                string loadConfigPath = File.ReadAllText(@$"Configs\LoadAppPath.ini");
-
-                if (loadConfigPath.Length < 1) {
-                    changeTextOnRunButton.Invoke("Файл запуска: null");
-                    return;
+                // default run if panel is using NOT REMOTE mode
+                if (MainWindow.remoteMode is false) {
+                    RunSimulationProcess();
+                }
+                // if panel in REMOTE mode
+                else {
+                    UDPMessaging.SendToRepeaters(new byte[] { 155, 1 });
                 }
 
-                changeTextOnRunButton("Ожидается запуск процесса");
-
-                try {
-                    Process.Start(loadConfigPath);
-                }
-                catch {
-                    changeTextOnRunButton.Invoke("invalid process");
-                    return;
-                }
-
-                changeTextOnRunButton.Invoke("Процесс запущен удачно");
             };
 
             killTargetsImmediatelyButton.Click += (_, _) => {
-                foreach (var target in findedTargets) {
-                    try {
-                        changeTextOnTerminateButton.Invoke($"Завершаем: {target.ID}");
-                        target.Process.Kill();
-                    }
-                    catch { }
+
+                // default kill if panel is using NOT REMOTE mode
+                if (MainWindow.remoteMode is false) {
+                    KillSimulationProcess();
+                }
+                // if panel in REMOTE mode
+                else {
+                    UDPMessaging.SendToRepeaters(new byte[] { 155, 2 });
                 }
             };
 
@@ -183,18 +230,39 @@ namespace InstructorShell {
                 }
                 lastRestartEngineDateTime = DateTime.Now;
 
-                try {
-                    IPAddress.TryParse(restartEngineAddressData.Split(':')[0], out IPAddress parsedAddress);
-                    int.TryParse(restartEngineAddressData.Split(':')[1], out int parsedPort);
-
-                    UDPMessaging.SendToEndPoint(new byte[1] { 228 }, new IPEndPoint(parsedAddress, parsedPort));
+                // default restart if panel is using NOT REMOTE mode
+                if (MainWindow.remoteMode is false) {
+                    RestartSimulationEngine();
                 }
-                catch { }
+                // if panel in REMOTE mode
+                else {
+                    UDPMessaging.SendToRepeaters(new byte[] { 155, 3 });
+                }
+            };
+
+            // try send "41" byte array as command to console
+            recalibrationButton.Click += (_, _) => {
+
+                if (MainWindow.remoteMode is false) {
+                    UDPMessaging.SendToEndPoint(new byte[] { 41, 1 }, new IPEndPoint(IPAddress.Parse("127.0.0.1"), 5600));
+                }
+                else {
+                    UDPMessaging.SendToRepeaters(new byte[] { 41, 1 });
+                }
+            };
+
+            // send to UE message that i wanna reset camera position in packet "42"
+            cameraResetButton.Click += (_, _) => {
+                if (MainWindow.remoteMode is false) {
+                    UDPMessaging.SendToEndPoint(new byte[] { 42, 1 }, new IPEndPoint(IPAddress.Parse("127.0.0.1"), 5687));
+                }
+                else {
+                    UDPMessaging.SendToRepeaters(new byte[] { 42, 1 });
+                }
             };
 
             // if target process launched - hide button
             ProcessManager.ProcessStarted += (info) => {
-
                 foreach (string targetTitle in processTargets) {
                     if (info.Title == targetTitle) {
                         findedTargets.Add(info);
@@ -206,6 +274,11 @@ namespace InstructorShell {
                         runSimulationButttonViewBox.Visibility = System.Windows.Visibility.Collapsed;
                         killTargetsImmediatelyButtonViewBox.Visibility = System.Windows.Visibility.Visible;
 
+
+                        if (MainWindow.remoteMode is false) {
+                            UDPMessaging.SendToRepeaters(new byte[] { 154, 1 });
+                        }
+
                         break;
                     }
                 }
@@ -214,16 +287,15 @@ namespace InstructorShell {
             // if target process ended - return button
             ProcessManager.ProcessEnded += (info) => {
 
-                if (findedTargets.Count == 0) return;
-
+                if (findedTargets.Count == 0) {
+                    return;
+                }
                 foreach (RunningAppInfo target in findedTargets) {
                     if (info.ID == target.ID && info.Title == target.Title) {
                         findedTargets.Remove(target);
                         break;
                     }
                 }
-
-                /*MainWindow.instance.Title = findedTargets.Count.ToString();*/
 
                 if (findedTargets.Count == 0) {
 
@@ -235,9 +307,12 @@ namespace InstructorShell {
                     if (findedTargets.Count == 0) {
                         AirMapPanel.instance.DisableRecording();
                     }
+
+                    if (MainWindow.remoteMode is false) {
+                        UDPMessaging.SendToRepeaters(new byte[] { 154, 2 });
+                    }
                 }
             };
-
 
             MainWindow.PanelWasOpened += delegate {
                 MainWindow.instance.Dispatcher.Invoke(delegate {
@@ -251,7 +326,6 @@ namespace InstructorShell {
                 });
             };
         }
-
         private void AttachProcessButton(in StackPanel stackPanel) {
             try {
                 controller_process_buttons_border.Child = null;
@@ -270,9 +344,6 @@ namespace InstructorShell {
             }
             catch { }
         }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        [SkipLocalsInit]
         private void RefreshBarsScale() {
             Task.Run(async () => {
                 await Task.Delay(500);
@@ -281,9 +352,6 @@ namespace InstructorShell {
                 savedStartupCircleBarWidth = circle_bar.ActualWidth;
             });
         }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        [SkipLocalsInit]
         private void UpdatePointersScale() {
 
             //MainWindow.instance.panel_name.Content = columnCircleBar.Width.Value;
@@ -291,9 +359,6 @@ namespace InstructorShell {
             pointer_vertical.Width = vertical_bar2.ActualWidth;
             pointer_circle.Width = vertical_bar2.ActualWidth * (tormoza == 0 ? 1 : 0.1d);
         }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        [SkipLocalsInit]
         private void UpdatePointersTransform() {
 
             // change RUD pointer position by RUD value;
@@ -312,9 +377,6 @@ namespace InstructorShell {
                 X = (Math.Clamp(rusLeftRight, -1, 1) * 60) * (circle_bar.ActualWidth / savedStartupCircleBarWidth)
             };
         }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        [SkipLocalsInit]
         private void UpdateTooltips() {
             rusToolTip.text = $"Значение руса:\n" +
                         $"Вверх / Вниз = {rusUpDown.ToString("0.000")}\n" +
@@ -322,9 +384,6 @@ namespace InstructorShell {
             rudToolTip.text = $"Значение руда: {rud.ToString("0.000")}";
             pedaliToolTip.text = $"Значение педалей: {pedali.ToString("0.000")}";
         }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        [SkipLocalsInit]
         private void TemperaturesMonitoring() {
             TemperatureMonitor temperatureMonitor = new TemperatureMonitor();
 
@@ -349,9 +408,6 @@ namespace InstructorShell {
                 }
             });
         }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        [SkipLocalsInit]
         private void PointersTest() {
             float sinV = 0;
             float cosV = 0;
@@ -378,6 +434,46 @@ namespace InstructorShell {
                     });
                 }
             });
+        }
+        private void RunSimulationProcess() {
+            (runSimulationButtton.Content as TextBlock).Text = "Попытка запустить процесс";
+
+            string loadConfigPath = File.ReadAllText(@$"Configs\LoadAppPath.ini");
+
+            if (loadConfigPath.Length < 1) {
+                (runSimulationButtton.Content as TextBlock).Text = "Файл запуска: null";
+                return;
+            }
+
+            (runSimulationButtton.Content as TextBlock).Text = "Ожидается запуск процесса";
+
+            try {
+                Process.Start(loadConfigPath);
+            }
+            catch {
+                (runSimulationButtton.Content as TextBlock).Text = "invalid process";
+                return;
+            }
+
+            (runSimulationButtton.Content as TextBlock).Text = "Процесс запущен удачно";
+        }
+        private void KillSimulationProcess() {
+            foreach (RunningAppInfo target in findedTargets) {
+                try {
+                    (killTargetsImmediatelyButton.Content as TextBlock).Text = $"Завершаем: {target.ID}";
+                    target.Process.Kill();
+                }
+                catch { }
+            }
+        }
+        private void RestartSimulationEngine() {
+            try {
+                IPAddress.TryParse(restartEngineAddressData.Split(':')[0], out IPAddress parsedAddress);
+                int.TryParse(restartEngineAddressData.Split(':')[1], out int parsedPort);
+
+                UDPMessaging.SendToEndPoint(new byte[1] { 228 }, new IPEndPoint(parsedAddress, parsedPort));
+            }
+            catch { }
         }
     }
 }

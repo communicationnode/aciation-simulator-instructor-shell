@@ -176,10 +176,10 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
     </Page.Resources>
 
-    <Grid x:Name="MainGrid" Background="#C1101010">
+    <Grid x:Name="MainGrid" Background="#F9101010">
         <Grid.RowDefinitions>
             <RowDefinition Height="3*"/>
             <RowDefinition MaxHeight="188" Height="8*"/>
@@ -195,7 +195,7 @@
 
         <Border Grid.Row="1" Grid.Column="1" CornerRadius="8" Margin="2" Background="#FF212121"></Border>
         <Border Grid.Row="2" Grid.Column="1" CornerRadius="8" Margin="2" Background="#FF212121"></Border>
-        
+
         <Grid x:Name="SlidersGrid" Grid.Row="2" Grid.Column="1">
             <Grid.Resources>
                 <Style TargetType="{x:Type Label}">
@@ -307,6 +307,6 @@
                 </Viewbox>
             </Button>
         </Grid>
-        <TextBlock Grid.Column="1" VerticalAlignment="Center" TextAlignment="Center" FontSize="22" TextWrapping="Wrap" Text="Панель управления погодными условиями на карте" Foreground="White"/>
+        <TextBlock Grid.Column="1" VerticalAlignment="Bottom" TextAlignment="Center" FontSize="22" TextWrapping="Wrap" Text="Панель управления погодными условиями на карте" Foreground="White"/>
     </Grid>
 </Page>

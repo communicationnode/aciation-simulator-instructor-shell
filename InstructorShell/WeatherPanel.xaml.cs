@@ -1,5 +1,7 @@
 ﻿using System.Net;
 using System.Windows.Controls;
+using CustomDesktopShell.UDPWork;
+using InstructorShell;
 
 namespace CustomDesktopShell {
     /// <summary>
@@ -20,31 +22,89 @@ namespace CustomDesktopShell {
 
             WindSlider.ValueChanged += (_, arg) => { SendWind(arg.NewValue); };
             TimeOfDaySlider.ValueChanged += (_, arg) => { SendTimeOfDay(arg.NewValue); };
+
+            AllowUdpPackets();
         }
 
+        void AllowUdpPackets() {
+            UDPMessaging.OnMessageGet += (packet) => {
+                if (packet[0] == 1 || packet[0] == 2 || packet[0] == 3) {
+                    IPEndPoint receiver = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 5687);
+                    UDPWork.UDPMessaging.SendToEndPoint(packet, receiver);
+                }
+            };
+        }
+
+
         public void SendTimeOfDay(double value) {
+
             byte[] packet = new byte[2];
             packet[0] = 1;
             packet[1] = (byte)(value);
 
-            IPEndPoint receiver = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 5687);
-            UDPWork.UDPMessaging.SendToEndPoint(packet, receiver);
+            if (MainWindow.remoteMode is false) {
+
+                IPEndPoint receiver = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 5687);
+                UDPWork.UDPMessaging.SendToEndPoint(packet, receiver);
+            }
+            else {
+                if (MainWindow.repeaterEndPoints is null) { return; }
+                foreach (var endPoint in MainWindow.repeaterEndPoints) {
+                    try {
+                        
+                        UDPMessaging.SendToEndPoint(packet, endPoint);
+                    }
+                    catch { }
+                }
+            }
+
+
         }
         public void SendWind(double value) {
+
             byte[] packet = new byte[2];
             packet[0] = 2;
             packet[1] = (byte)(value);
 
-            IPEndPoint receiver = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 5687);
-            UDPWork.UDPMessaging.SendToEndPoint(packet, receiver);
+            if (MainWindow.remoteMode is false) {
+
+                IPEndPoint receiver = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 5687);
+                UDPWork.UDPMessaging.SendToEndPoint(packet, receiver);
+            }
+            else {
+                if (MainWindow.repeaterEndPoints is null) { return; }
+                foreach (var endPoint in MainWindow.repeaterEndPoints) {
+                    try {
+                        
+                        UDPMessaging.SendToEndPoint(packet, endPoint);
+                    }
+                    catch { }
+                }
+            }
+
+
         }
         public void SendWeather(byte value) {
+
             byte[] packet = new byte[2];
             packet[0] = 3;
             packet[1] = value;
 
-            IPEndPoint receiver = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 5687);
-            UDPWork.UDPMessaging.SendToEndPoint(packet, receiver);
+            if (MainWindow.remoteMode is false) {
+
+                IPEndPoint receiver = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 5687);
+                UDPWork.UDPMessaging.SendToEndPoint(packet, receiver);
+            }
+            else {
+                if (MainWindow.repeaterEndPoints is null) { return; }
+                foreach (var endPoint in MainWindow.repeaterEndPoints) {
+                    try {
+                        
+                        UDPMessaging.SendToEndPoint(packet, endPoint);
+                    }
+                    catch { }
+                }
+            }
         }
     }
 }

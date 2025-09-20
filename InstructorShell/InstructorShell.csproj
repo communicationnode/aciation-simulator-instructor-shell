@@ -11,8 +11,8 @@
 	  <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <ApplicationIcon>Images\ico.ico</ApplicationIcon>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <AssemblyVersion>1.0.0.2</AssemblyVersion>
-    <FileVersion>1.0.0.2</FileVersion>
+    <AssemblyVersion>1.0.0.5</AssemblyVersion>
+    <FileVersion>1.0.0.5</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,6 +30,7 @@
     <None Remove="Images\armrus_wallp2_32b.png" />
     <None Remove="Images\armrus_wallp_32b.png" />
     <None Remove="Images\background.png" />
+    <None Remove="Images\background1.png" />
     <None Remove="Images\bekarito.png" />
     <None Remove="Images\big_map_scale.png" />
     <None Remove="Images\data-shield\01.png" />
@@ -173,6 +174,7 @@
     <None Remove="Images\data-shield\scrollbar.bmp" />
     <None Remove="Images\data-shield\treeview_a.png" />
     <None Remove="Images\data-shield\treeview_b.png" />
+    <None Remove="Images\data-shield\WarningSign.png" />
     <None Remove="Images\dev_arrow.png" />
     <None Remove="Images\EMBLEM.png" />
     <None Remove="Images\favicon.ico" />
@@ -343,6 +345,57 @@
     <None Remove="Images\stardock\Wood_x1.png" />
     <None Remove="Images\stardock\Wood_x2.png" />
     <None Remove="Images\star_vector.svg" />
+    <None Remove="Images\stat_panel\6.jpg" />
+    <None Remove="Images\stat_panel\9_2.jpg" />
+    <None Remove="Images\stat_panel\accelerometer_arrow.png" />
+    <None Remove="Images\stat_panel\accelerometer_arrow2.png" />
+    <None Remove="Images\stat_panel\accelerometer_arrow3.png" />
+    <None Remove="Images\stat_panel\accelerometer_arrow4.png" />
+    <None Remove="Images\stat_panel\accelerometer_arrow5.png" />
+    <None Remove="Images\stat_panel\bar_change.png" />
+    <None Remove="Images\stat_panel\bar_change_bg.png" />
+    <None Remove="Images\stat_panel\distance.png" />
+    <None Remove="Images\stat_panel\engine_speed.png" />
+    <None Remove="Images\stat_panel\engine_speed_top.png" />
+    <None Remove="Images\stat_panel\fuel.png" />
+    <None Remove="Images\stat_panel\fuel_oil_barometer.png" />
+    <None Remove="Images\stat_panel\gas_temp.png" />
+    <None Remove="Images\stat_panel\ik_52_arrow.png" />
+    <None Remove="Images\stat_panel\km_8_arrow.png" />
+    <None Remove="Images\stat_panel\km_8_arrow2.png" />
+    <None Remove="Images\stat_panel\kpp3.png" />
+    <None Remove="Images\stat_panel\kren_arrow.png" />
+    <None Remove="Images\stat_panel\kren_tangaj.png" />
+    <None Remove="Images\stat_panel\kren_tangaj2.png" />
+    <None Remove="Images\stat_panel\kren_tangaj_mask.png" />
+    <None Remove="Images\stat_panel\kursoglisada.png" />
+    <None Remove="Images\stat_panel\kursoglisada2.png" />
+    <None Remove="Images\stat_panel\kursoglisada3.png" />
+    <None Remove="Images\stat_panel\kursoglisada_arrow.png" />
+    <None Remove="Images\stat_panel\kursoglisada_arrow2.png" />
+    <None Remove="Images\stat_panel\kursoglisada_blanker.png" />
+    <None Remove="Images\stat_panel\kursoglisada_line_horizontal.png" />
+    <None Remove="Images\stat_panel\kursoglisada_line_vertical.png" />
+    <None Remove="Images\stat_panel\manometer_arrow.png" />
+    <None Remove="Images\stat_panel\manometer_arrow2.png" />
+    <None Remove="Images\stat_panel\m_2000_arrow.png" />
+    <None Remove="Images\stat_panel\npp_arrow2.png" />
+    <None Remove="Images\stat_panel\npp_arrow2_2.png" />
+    <None Remove="Images\stat_panel\npp_arrow2_3.png" />
+    <None Remove="Images\stat_panel\npp_arrow2_4.png" />
+    <None Remove="Images\stat_panel\npp_arrow2_5.png" />
+    <None Remove="Images\stat_panel\npp_arrow2_6.png" />
+    <None Remove="Images\stat_panel\oborots.png" />
+    <None Remove="Images\stat_panel\preview.png" />
+    <None Remove="Images\stat_panel\radiocompass.png" />
+    <None Remove="Images\stat_panel\radioHeight.png" />
+    <None Remove="Images\stat_panel\radio_heght_700.png" />
+    <None Remove="Images\stat_panel\radio_height.png" />
+    <None Remove="Images\stat_panel\radio_height_700.png" />
+    <None Remove="Images\stat_panel\radio_height_bg.png" />
+    <None Remove="Images\stat_panel\speed.png" />
+    <None Remove="Images\stat_panel\variometer.png" />
+    <None Remove="Images\stat_panel\volt_amper.png" />
     <None Remove="Images\superMap.png" />
     <None Remove="Images\superMap32.png" />
     <None Remove="Images\SuperSecret.jpg" />
@@ -390,7 +443,7 @@
     <PackageReference Include="Jint" Version="4.4.1" />
     <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.4" />
     <PackageReference Include="SharpVectors.Wpf" Version="1.8.4.2" />
-    <PackageReference Include="System.Management" Version="9.0.0" />
+    <PackageReference Include="System.Management" Version="9.0.9" />
   </ItemGroup>
 
   <ItemGroup>
@@ -402,10 +455,9 @@
     <Resource Include="fonts\GOST_BU.TTF" />
     <Resource Include="Images\AI25_TL.jpg" />
     <Resource Include="Images\all.png" />
-    <Resource Include="Images\armrus_wallp.jpg" />
-    <Resource Include="Images\armrus_wallp2_32b.png" />
     <Resource Include="Images\armrus_wallp_32b.png" />
-    <Resource Include="Images\background.png" />
+    <Resource Include="Images\background1.png" />
+    <Resource Include="Images\bekarito.png" />
     <Resource Include="Images\big_map_scale.png" />
     <Resource Include="Images\data-shield\01.png" />
     <Resource Include="Images\data-shield\1.png" />
@@ -548,7 +600,9 @@
     <Resource Include="Images\data-shield\scrollbar.bmp" />
     <Resource Include="Images\data-shield\treeview_a.png" />
     <Resource Include="Images\data-shield\treeview_b.png" />
+    <Resource Include="Images\data-shield\WarningSign.png" />
     <Resource Include="Images\dev_arrow.png" />
+    <Resource Include="Images\EMBLEM.png" />
     <Resource Include="Images\favicon.ico" />
     <Resource Include="Images\ico.ico" />
     <Resource Include="Images\l39ico.png" />
@@ -717,6 +771,54 @@
     <Resource Include="Images\stardock\Wood_x1.png" />
     <Resource Include="Images\stardock\Wood_x2.png" />
     <Resource Include="Images\star_vector.svg" />
+    <Resource Include="Images\stat_panel\6.jpg" />
+    <Resource Include="Images\stat_panel\9_2.jpg" />
+    <Resource Include="Images\stat_panel\accelerometer_arrow.png" />
+    <Resource Include="Images\stat_panel\accelerometer_arrow2.png" />
+    <Resource Include="Images\stat_panel\accelerometer_arrow3.png" />
+    <Resource Include="Images\stat_panel\accelerometer_arrow4.png" />
+    <Resource Include="Images\stat_panel\accelerometer_arrow5.png" />
+    <Resource Include="Images\stat_panel\bar_change.png" />
+    <Resource Include="Images\stat_panel\bar_change_bg.png" />
+    <Resource Include="Images\stat_panel\distance.png" />
+    <Resource Include="Images\stat_panel\engine_speed.png" />
+    <Resource Include="Images\stat_panel\engine_speed_top.png" />
+    <Resource Include="Images\stat_panel\fuel.png" />
+    <Resource Include="Images\stat_panel\fuel_oil_barometer.png" />
+    <Resource Include="Images\stat_panel\gas_temp.png" />
+    <Resource Include="Images\stat_panel\ik_52_arrow.png" />
+    <Resource Include="Images\stat_panel\km_8_arrow.png" />
+    <Resource Include="Images\stat_panel\km_8_arrow2.png" />
+    <Resource Include="Images\stat_panel\kpp3.png" />
+    <Resource Include="Images\stat_panel\kren_arrow.png" />
+    <Resource Include="Images\stat_panel\kren_tangaj.png" />
+    <Resource Include="Images\stat_panel\kren_tangaj2.png" />
+    <Resource Include="Images\stat_panel\kursoglisada.png" />
+    <Resource Include="Images\stat_panel\kursoglisada2.png" />
+    <Resource Include="Images\stat_panel\kursoglisada3.png" />
+    <Resource Include="Images\stat_panel\kursoglisada_arrow.png" />
+    <Resource Include="Images\stat_panel\kursoglisada_arrow2.png" />
+    <Resource Include="Images\stat_panel\kursoglisada_blanker.png" />
+    <Resource Include="Images\stat_panel\kursoglisada_line_horizontal.png" />
+    <Resource Include="Images\stat_panel\kursoglisada_line_vertical.png" />
+    <Resource Include="Images\stat_panel\manometer_arrow.png" />
+    <Resource Include="Images\stat_panel\manometer_arrow2.png" />
+    <Resource Include="Images\stat_panel\m_2000_arrow.png" />
+    <Resource Include="Images\stat_panel\npp_arrow2.png" />
+    <Resource Include="Images\stat_panel\npp_arrow2_2.png" />
+    <Resource Include="Images\stat_panel\npp_arrow2_3.png" />
+    <Resource Include="Images\stat_panel\npp_arrow2_4.png" />
+    <Resource Include="Images\stat_panel\npp_arrow2_5.png" />
+    <Resource Include="Images\stat_panel\npp_arrow2_6.png" />
+    <Resource Include="Images\stat_panel\oborots.png" />
+    <Resource Include="Images\stat_panel\preview.png" />
+    <Resource Include="Images\stat_panel\radiocompass.png" />
+    <Resource Include="Images\stat_panel\radio_height.png" />
+    <Resource Include="Images\stat_panel\radio_height_700.png" />
+    <Resource Include="Images\stat_panel\radio_height_bg.png" />
+    <Resource Include="Images\stat_panel\speed.png" />
+    <Resource Include="Images\stat_panel\variometer.png" />
+    <Resource Include="Images\stat_panel\volt_amper.png" />
     <Resource Include="Images\SuperSecret.jpg" />
     <Resource Include="Images\super_map_scale.jpg" />
     <Resource Include="Images\weather\cloudy_pic.png" />
@@ -747,6 +849,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Configs\repeatersList.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Configs\restartEngineAddress.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

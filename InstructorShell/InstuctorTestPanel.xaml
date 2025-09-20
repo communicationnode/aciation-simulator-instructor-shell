@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:CustomDesktopShell"
       mc:Ignorable="d" 
-      d:DesignHeight="455" d:DesignWidth="1920"
+      d:DesignHeight="955" d:DesignWidth="1920"
       Title="InstuctorTestPanel">
 
     <Page.Resources>
@@ -178,54 +178,320 @@
         </Style>
     </Page.Resources>
 
-    <Grid x:Name="MainGrid" Background="#C1101010">
+    <!-- main grid -->
+    <Grid x:Name="MainGrid" Background="#F9101010">
         <Grid.RowDefinitions>
-            <RowDefinition Height="3*"/>
+            <RowDefinition MaxHeight="32px" Height="1*"/>
             <RowDefinition Height="16*"/>
-            <RowDefinition Height="3*"/>
+            <RowDefinition MaxHeight="32px" Height="1*"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="10*"/>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition MaxWidth="32px" Width="1*"/>
+            <ColumnDefinition Width="16*"/>
+            <ColumnDefinition MaxWidth="32px" Width="1*"/>
         </Grid.ColumnDefinitions>
+        <Viewbox Grid.Row="1" Grid.Column="1" Stretch="Uniform">
+            <Grid x:Name="main_preview" Height="891" Width="1856">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-        <Grid x:Name="ContentGrid" Grid.Column="1" Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="4*"/>
-            </Grid.ColumnDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
 
-            <Button x:Name="TestButton" Grid.Column="0" Margin="9,94,9,94">
-                <Button.Content>
-                    <StackPanel>
-                        <Image Source="/Images/data-shield/44.png" Margin="12,12,12,12" MaxHeight="32"/>
-                        <Label Content="Тест оборудования" FontSize="32" Foreground="#FFEFEFEF" HorizontalAlignment="Center"></Label>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
-            <Rectangle Grid.Column="1" RadiusX="6" RadiusY="6" Margin="0,0,0,0" StrokeThickness="3">
-                <Rectangle.Fill>
-                    <LinearGradientBrush EndPoint="1,1" StartPoint="0,0" ColorInterpolationMode="ScRgbLinearInterpolation" MappingMode="RelativeToBoundingBox" SpreadMethod="Pad">
-                        <GradientStop Color="#1CAFAFAF" Offset="0"/>
-                        <GradientStop Color="#4F323232" Offset="1"/>
-                    </LinearGradientBrush>
-                </Rectangle.Fill>
-                <Rectangle.Stroke>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="#FF4E4E4E" Offset="1"/>
-                        <GradientStop Color="#FF5D5D5D" Offset="0"/>
-                    </LinearGradientBrush>
-                </Rectangle.Stroke>
-            </Rectangle>
-            <ScrollViewer Grid.Column="1" Foreground="White" Margin="8,8,8,8">
-                <StackPanel>
-                    <Label Content="0x001" Foreground="White"/>
-                    <Label Content="0x010" Foreground="White"/>
-                    <Label Content="0x011" Foreground="White"/>
-                </StackPanel>
-            </ScrollViewer>
-        </Grid>
+                <!-- row 0 -->
+                <!-- block speed -->
+                <Grid Margin="2" x:Name="block_speed" Grid.Row="0" Grid.Column="0">
+
+                    <Image Source="/Images/stat_panel/speed.png"/>
+                </Grid>
+
+                <!-- block tangaj kren -->
+                <Grid Margin="2" x:Name="block_tangajkren" Grid.Row="0" Grid.Column="1" ClipToBounds="True">
+                    <Grid Margin="128,32,128,32" ClipToBounds="True">
+                        <Image Source="/Images/stat_panel/kpp3.png" RenderTransformOrigin="0.5,0.5">
+                            <Image.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleX="3.6" ScaleY="3.6"/>
+                                    <SkewTransform/>
+                                    <RotateTransform/>
+                                    <TranslateTransform x:Name="tangaj_angle" Y="-0"/>
+                                </TransformGroup>
+                            </Image.RenderTransform>
+                        </Image>
+                    </Grid>
+                    <Image Source="/Images/stat_panel/kren_tangaj2.png"/>
+                    <Image Source="/Images/stat_panel/kren_arrow.png" RenderTransformOrigin="0.5,0.25">
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="0.45" ScaleY="0.45"/>
+                                <SkewTransform/>
+                                <RotateTransform x:Name="kren_angle" Angle="0"/>
+                                <TranslateTransform Y="17"/>
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
+                </Grid>
+
+                <!-- block variometer -->
+                <Grid Margin="2" x:Name="block_variometer" Grid.Row="0" Grid.Column="2">
+                    <Image Source="/Images/stat_panel/variometer.png"/>
+                </Grid>
+
+                <!-- block oborots -->
+                <Grid Margin="2" x:Name="block_oborots" Grid.Row="0" Grid.Column="3">
+                    <Image Source="/Images/stat_panel/oborots.png"/>
+
+
+                </Grid>
+
+                <!-- block gas temperatures -->
+                <Grid Margin="2" x:Name="block_gastemperatures" Grid.Row="0" Grid.Column="4">
+                    <Image Source="/Images/stat_panel/gas_temp.png"/>
+
+                </Grid>
+
+                <!-- row 1 -->
+                <!-- block radio height -->
+                <Grid Margin="2" x:Name="block_radioheight" Grid.Row="1" Grid.Column="0">
+                    <Image Source="/Images/stat_panel/radio_height_bg.png" RenderTransformOrigin="0.5,0.5">
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="0.75" ScaleY="0.75"/>
+                                <SkewTransform/>
+                                <RotateTransform x:Name="radio_height_bg_angle" Angle="0"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
+                    <Image Source="/Images/stat_panel/radio_height.png"/>
+                    <Image Source="/Images/stat_panel/accelerometer_arrow.png" RenderTransformOrigin="0.503,0.934" Margin="36,33,35,3">
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="0.3" ScaleY="0.3"/>
+                                <SkewTransform/>
+                                <RotateTransform x:Name="radio_height_arrow_mini_angle" Angle="0"/>
+                                <TranslateTransform Y="-126.014" X="-0.771"/>
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
+                </Grid>
+
+                <!-- block kurso glisaga -->
+                <Grid Margin="2" x:Name="block_kursoglisada" Grid.Row="1" Grid.Column="1">
+                    <Image Source="/Images/stat_panel/kursoglisada3.png"/>
+
+                    <Grid ClipToBounds="True" Margin="110,75,129,90">
+                        <!-- horizontal line -->
+                        <Image Source="/Images/stat_panel/kursoglisada_line_horizontal.png" RenderTransformOrigin="0.5,0.5">
+                            <Image.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleX="2" ScaleY="2"/>
+                                    <TranslateTransform x:Name="kursoglisada_horizontal_line" X="0" Y="0"/>
+                                </TransformGroup>
+                            </Image.RenderTransform>
+                        </Image>
+
+                        <!-- vertical line -->
+                        <Image Source="/Images/stat_panel/kursoglisada_line_vertical.png" RenderTransformOrigin="0.5,0.5">
+                            <Image.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleX="2" ScaleY="2"/>
+                                    <TranslateTransform x:Name="kursoglisada_vertical_line" X="-62" Y="0"/>
+                                </TransformGroup>
+                            </Image.RenderTransform>
+                        </Image>
+
+                        <!-- blanker K -->
+                        <Image x:Name="blanker_K" Source="/Images/stat_panel/kursoglisada_blanker.png" Margin="7,9,40,47"/>
+
+                        <!-- blanker G -->
+                        <Image x:Name="blanker_G" Source="/Images/stat_panel/kursoglisada_blanker.png" Margin="42,47,5,9"/>
+                    </Grid>
+
+                    <!-- kursoglisada wheel -->
+                    <Image Source="/Images/stat_panel/kursoglisada2.png" Margin="35,42,51,57" RenderTransformOrigin="0.5,0.5">
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform x:Name="kusroglisada_valuemeter_angle" Angle="0"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
+
+                    <!--  zpu arrow  -->
+                    <Image Margin="77,42,94,57" Source="/Images/stat_panel/kursoglisada_arrow.png" RenderTransformOrigin="0.5,0.5">
+                        <Image.RenderTransform>
+                            <RotateTransform x:Name="kurso_glisada_transparent_arrow" Angle="25"/>
+                        </Image.RenderTransform>
+                    </Image>
+
+                    <!--  kurs arrow  -->
+                    <Image Margin="77,42,94,57" Source="/Images/stat_panel/kursoglisada_arrow2.png" RenderTransformOrigin="0.5,0.5">
+                        <Image.RenderTransform>
+                            <RotateTransform x:Name="kurso_glisada_filled_arrow" Angle="45"/>
+                        </Image.RenderTransform>
+                    </Image>
+                </Grid>
+
+                <!-- block radiocompass -->
+                <Grid Margin="2" x:Name="block_radiocompass" Grid.Row="1" Grid.Column="2">
+                    <Image Source="/Images/stat_panel/radiocompass.png"/>
+                </Grid>
+
+                <!-- block fuel oil barometer -->
+                <Grid Margin="2" x:Name="block_fueloilbarometer" Grid.Row="1" Grid.Column="3">
+                    <Image Source="/Images/stat_panel/fuel_oil_barometer.png"/>
+                    <!-- arrow 1 -->
+                    <Image Source="/Images/stat_panel/accelerometer_arrow.png" RenderTransformOrigin="0.51,0.932" Margin="2,-79,-2,79">
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="0.3" ScaleY="0.3"/>
+                                <SkewTransform/>
+                                <RotateTransform x:Name="fuel_pressure_angle" Angle="117"/>
+                                <TranslateTransform X="-2.57" Y="-88.602"/>
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
+
+                    <!-- arrow 2 -->
+                    <Image Source="/Images/stat_panel/accelerometer_arrow.png" RenderTransformOrigin="0.51,0.932" Margin="91,50,-91,-51">
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="0.3" ScaleY="0.3"/>
+                                <SkewTransform/>
+                                <RotateTransform x:Name="oil_temperature_angle" Angle="17"/>
+                                <TranslateTransform X="-2.57" Y="-88.602"/>
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
+
+                    <!-- arrow 3 -->
+                    <Image Source="/Images/stat_panel/accelerometer_arrow.png" RenderTransformOrigin="0.51,0.932" Margin="-87,51,87,-51">
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="0.3" ScaleY="0.3"/>
+                                <SkewTransform/>
+                                <RotateTransform x:Name="oil_pressure_angle" Angle="-25"/>
+                                <TranslateTransform X="-2.57" Y="-88.602"/>
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
+                </Grid>
+
+                <!-- block fuel -->
+                <Grid Margin="2" x:Name="block_fuel" Grid.Row="1" Grid.Column="4">
+                    <Image Source="/Images/stat_panel/fuel.png"/>
+                </Grid>
+
+                <!--row 2-->
+                <!-- block radio height 700 -->
+                <Grid Margin="2" x:Name="block_radioheight_700" Grid.Row="2" Grid.Column="0">
+                    <Image Source="/Images/stat_panel/radio_height_700.png"/>
+                </Grid>
+
+                <!-- block distance -->
+                <Grid Margin="2" x:Name="block_distance" Grid.Row="2" Grid.Column="1">
+                    <Image Source="/Images/stat_panel/distance.png"/>
+                    <Label x:Name="distance_label" VerticalAlignment="Center" FontSize="35" HorizontalAlignment="Right" Foreground="White" Margin="100,80,100,155" RenderTransformOrigin="0.5,0.5">
+                        <Label.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="1.7" ScaleY="1.5"/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform X="-24" Y="-4"/>
+                            </TransformGroup>
+                        </Label.RenderTransform> 000
+                    </Label>
+                </Grid>
+
+                <!-- block barometer -->
+                <Grid Margin="2" x:Name="block_barometer" Grid.Row="2" Grid.Column="2">
+                    <Image Source="/Images/stat_panel/bar_change_bg.png" RenderTransformOrigin="0.5,0.5">
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="0.68" ScaleY="0.68"/>
+                                <SkewTransform/>
+                                <RotateTransform x:Name="bar_change_bg_angle" Angle="0"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
+                    <Image Source="/Images/stat_panel/bar_change.png"/>
+
+                    <!-- arrow -->
+                    <Image Visibility="Collapsed" Source="/Images/stat_panel/accelerometer_arrow.png" RenderTransformOrigin="0.506,0.9255" Margin="0,35,0,0">
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="0.5" ScaleY="0.5"/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="51"/>
+                                <TranslateTransform X="-1.5" Y="-124.5"/>
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
+                </Grid>
+
+                <!-- block engine speed -->
+                <Grid Margin="2" x:Name="block_enginespeed" Grid.Row="2" Grid.Column="3">
+                    <Image Source="/Images/stat_panel/engine_speed.png"/>
+                    <Image Panel.ZIndex="100" Source="/Images/stat_panel/engine_speed_top.png"/>
+                    <Image Source="/Images/stat_panel/accelerometer_arrow.png" RenderTransformOrigin="0.503,0.934" Margin="36,138,35,-102">
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="0.7" ScaleY="0.7"/>
+                                <SkewTransform/>
+                                <RotateTransform x:Name="enginespeed_angle" Angle="27"/>
+                                <TranslateTransform Y="-126.014" X="-0.771"/>
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
+                </Grid>
+
+                <!-- block volt amper -->
+                <Grid Margin="2" x:Name="block_voltamper" Grid.Row="2" Grid.Column="4">
+                    <Image Source="/Images/stat_panel/volt_amper.png"/>
+
+                    <!-- arrow 1 -->
+                    <Image Source="/Images/stat_panel/accelerometer_arrow.png" RenderTransformOrigin="0.51,0.932" Margin="-24,-36,23,37">
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="0.3" ScaleY="0.3"/>
+                                <SkewTransform/>
+                                <RotateTransform x:Name="volt_angle" Angle="-180"/>
+                                <TranslateTransform X="-2.57" Y="-88.602"/>
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
+
+                    <!-- arrow 2 -->
+                    <Image Source="/Images/stat_panel/accelerometer_arrow.png" RenderTransformOrigin="0.51,0.932" Margin="25,-36,-26,37">
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="0.3" ScaleY="0.3"/>
+                                <SkewTransform/>
+                                <RotateTransform x:Name="amper_angle" Angle="180"/>
+                                <TranslateTransform X="-2.57" Y="-88.602"/>
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
+
+                </Grid>
+
+            </Grid>
+
+        </Viewbox>
+
+        <!-- create preview panel 5x3 (columns\rows) -->
     </Grid>
 </Page>

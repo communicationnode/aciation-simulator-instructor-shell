@@ -7,9 +7,9 @@ using CustomDesktopShell;
 using InstructorShell.Processes;
 using CustomDesktopShell.UDPWork;
 using System.Reflection;
-using Acornima.Ast;
-using Jint.Runtime;
 using System.Windows.Media;
+using System.Net;
+using System.IO;
 
 namespace InstructorShell {
 
@@ -23,6 +23,7 @@ namespace InstructorShell {
 
         // singletone
         public static MainWindow instance;
+        internal static IPEndPoint[]? repeaterEndPoints = null;
 
         // bools
         public static bool panelActivateState { get; private set; } = false;
@@ -34,10 +35,8 @@ namespace InstructorShell {
 
         // pages
         WeatherPanel weatherPanelPage;
-        InstuctorTestPanel testPanelPage;
+        InstuctorTestPanel priborsPanelPage;
         AirMapPanel mapPanelPage;
-
-
 
         // constructor
 
@@ -62,7 +61,9 @@ namespace InstructorShell {
                 }
             }
 
-            authorRights_label.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version} .Разработал \"-\". Год выпуска - 2025";
+            ParseRepeaterList();
+
+            authorRights_label.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version} .Разработал \"---\". Год выпуска - 2025";
 
             //RenderOptions.ProcessRenderMode = System.Windows.Interop.RenderMode.SoftwareOnly;
 
@@ -73,7 +74,7 @@ namespace InstructorShell {
             MarginCursorGrid();
 
             SetTooltip(panel_name, new ToolTipText("Мониторинг состояния самолета на карте местности с возможностью управления погодными условиями"));
-            SetTooltip(authorRights_label, new ToolTipText("Разработал -"));
+            SetTooltip(authorRights_label, new ToolTipText("Разработал ---"));
 
             ProcessManager.Watch();
         }
@@ -91,6 +92,26 @@ namespace InstructorShell {
                     programOneInstanceMarker?.WaitOne();
                 }
             });
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        [SkipLocalsInit]
+        internal static void ParseRepeaterList() {
+            // break method if file is not exist
+            if (File.Exists(@"Configs\repeatersList.ini") is false) return;
+
+            // get all lines
+            string[] readed = File.ReadAllLines(@"Configs\repeatersList.ini");
+
+            // initialize IpEndPoint array with readed length;
+            repeaterEndPoints = new IPEndPoint[readed.Length];
+
+            // fill each array item by parsed line;
+            for (int i = 0; i < readed.Length; i++) {
+                string[] splitted = readed[i].Split(':');
+
+                repeaterEndPoints[i] = new IPEndPoint(IPAddress.Parse(splitted[0]), int.Parse(splitted[1]));
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
@@ -152,7 +173,7 @@ namespace InstructorShell {
         private protected void AllowControls() {
 
             weatherPanelPage = new WeatherPanel();
-            testPanelPage = new InstuctorTestPanel();
+            priborsPanelPage = new InstuctorTestPanel();
             mapPanelPage = new AirMapPanel();
 
 
@@ -171,14 +192,17 @@ namespace InstructorShell {
                 ChangePageAnimation(weatherPanelPage);
                 SetOpenPanelState(true);
             };
-            MainWindow.instance.test_panel_btn.Click += (_, _) => {
-                ChangePageAnimation(testPanelPage);
-                SetOpenPanelState(true);
-            };
+            
             MainWindow.instance.map_panel_btn.Click += (_, _) => {
                 ChangePageAnimation(mapPanelPage);
                 SetOpenPanelState(true);
             };
+
+            MainWindow.instance.stat_panel_btn.Click += (_, _) => {
+                ChangePageAnimation(priborsPanelPage);
+                SetOpenPanelState(true);
+            };
+
             MainWindow.instance.close_panel_btn.Click += (_, _) => {
                 if (MainWindow.instance.instructor_grid.RowDefinitions[0].Height.Value != 0) {
                     SetOpenPanelState(false);

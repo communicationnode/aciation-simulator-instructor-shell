@@ -38,7 +38,6 @@ namespace CustomDesktopShell.UDPWork {
             StartReceive();
         }
 
-
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         [SkipLocalsInit]
         internal static void StartReceive() {
@@ -61,7 +60,6 @@ namespace CustomDesktopShell.UDPWork {
             });
         }
 
-
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         [SkipLocalsInit]
         internal static void SendToEndPoint(byte[] datagram, IPEndPoint endPoint) {
@@ -72,6 +70,22 @@ namespace CustomDesktopShell.UDPWork {
                 crashed = true;
                 receiver.Close();
                 OnCrashed();
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        [SkipLocalsInit]
+        internal static void SendToRepeaters(in byte[] datagram) {
+
+            if (MainWindow.repeaterEndPoints is null) { 
+                return;
+            }
+
+            foreach (var endPoint in MainWindow.repeaterEndPoints) {
+                try {
+                    UDPMessaging.SendToEndPoint(datagram, endPoint);
+                }
+                catch { }
             }
         }
     }

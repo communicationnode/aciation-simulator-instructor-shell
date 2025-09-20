@@ -179,7 +179,7 @@
         </Style>
     </Page.Resources>
 
-    <Grid x:Name="MainGrid" Background="#C1101010">
+    <Grid x:Name="MainGrid" Background="#F9101010">
         <Grid.RowDefinitions>
             <RowDefinition MaxHeight="8px" Height="3*"/>
             <RowDefinition Height="16*"/>
@@ -200,11 +200,20 @@
 
             <Rectangle Grid.Column="1" RadiusX="6" RadiusY="6" Margin="0,0,0,0" StrokeThickness="3" Stroke="#FFADADAD">
                 <Rectangle.Fill>
-                    <ImageBrush ImageSource="/Images/stardock/Flame Grid 01.png" Stretch="UniformToFill" Opacity="0.75"/>
+                    <ImageBrush RenderOptions.BitmapScalingMode="NearestNeighbor" ImageSource="/Images/stardock/Rock_x2.png" Stretch="UniformToFill" Opacity="0.95" TileMode="FlipXY">
+                        <ImageBrush.Transform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="0.3" ScaleY="0.3"/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </ImageBrush.Transform>
+                    </ImageBrush>
                 </Rectangle.Fill>
             </Rectangle>
 
-            <ScrollViewer x:Name="AirMapScrollViewer" Grid.Column="0" Margin="9,9,9,9" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden">
+            <ScrollViewer x:Name="AirMapScrollViewer" Grid.Column="0" Margin="9,9,9,9" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" d:IsHidden="True">
                 <Canvas x:Name="AirMapContentGrid" Height="1480" Width="1920" AllowDrop="True" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                     <Image x:Name="AirMapImage" UseLayoutRounding="False" Cursor="Arrow" Stretch="Fill" Width="2920" Height="1080" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Image.Source>
